@@ -78,4 +78,8 @@ async function getExif(sticker) {
  return { packname: json.sticker_pack_name, author: json.sticker_pack_publisher };
 }
 
-module.exports = { toSticker, addExif, getExif };
+module.exports = {
+ toSticker, 
+ addExif, 
+ getExif 
+};
