@@ -2,7 +2,7 @@
   "name": "Leon",
   "description": "WhatsApp bot.",
   "logo": "https://i.ibb.co/wNCbpry/20240101-130819.jpg",
-  "repository": "https://github.com/TOXIC-DEVIL/Leon-md",
+  "repository": "https://github.com/TOXIC-DEVIL/Leon",
   "stack": "container",
   "env": {
     "SESSION": {
