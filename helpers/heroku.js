@@ -21,7 +21,7 @@ async function Heroku(action, param) {
   } else if (action == 'setenv') {
    return await heroku.patch(`/apps/${process.env.HEROKU_APP_NAME}/config-vars`, { 
     body: { 
-      [params[0]]: params[1]
+      [param[0]]: param[1]
     } 
    }).catch(async () => false);
   } else if (action == 'delenv') {
