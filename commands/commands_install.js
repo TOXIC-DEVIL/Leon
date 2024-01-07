@@ -23,7 +23,8 @@ module.exports = {
      allCommands().map(async (cmd) => {
       if (cmd.name == name) return await msg.reply({ text: '*A command already exists with this name!*' });
      });
-    } catch {
+    } catch (e) {
+      console.log(e);
       return await msg.reply({ text: '*Invalid url, enter a valid raw url of command to install command!*' });
     }
     fs.writeFileSync(__dirname + '/' + name + '.js', content)
