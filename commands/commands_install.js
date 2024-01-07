@@ -13,14 +13,19 @@ module.exports = {
     } catch {
       return await msg.reply({ text: '*Invalid url, enter a valid raw url of command to install command!*' });
     }
-    let content = await parseJson(text);
-    if (!/module|exports|command|func|(sock|msg|text)/.test(content)) {
+    text = text.includes('raw') ? text : (text.endsWith('/') ? (text+'raw') : (text+'/raw'));
+    try {
+     let content = await parseJson(text);
+     if (!/module|exports|command|func|(sock|msg|text)/.test(content)) {
       return await msg.reply({ text: '*The command must follow the syntax!*' });
-    }
-    let name = content.match(/command:\s*'([^']+)'/)[1];
-    allCommands().map(async (cmd) => {
+     }
+     let name = content.match(/command:\s*'([^']+)'/)[1];
+     allCommands().map(async (cmd) => {
       if (cmd.name == name) return await msg.reply({ text: '*A command already exists with this name!*' });
-    });
+     });
+    } catch {
+      return await msg.reply({ text: '*Invalid url, enter a valid raw url of command to install command!*' });
+    }
     fs.writeFileSync(__dirname + '/' + name + '.js', content)
     try {
       require(__dirname + '/' + name);
