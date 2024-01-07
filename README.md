@@ -19,7 +19,7 @@
 ##### HEROKU
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/TOXIC-DEVIL/Leon)
 ##### KOYEB
-[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/apps/deploy?repository=https%3A%2F%2Fgithub.com%2FTOXIC-DEVIL%2FLeon&type=git&env%5BADMINS%5D=&name=leon&env%5BRBG_API_KEY%5D=&env%5BMODE%5D=private&env%5BSESSION%5D=&env%5BPRERIX%5D=!&env%5BPLATFORM%5D=koyeb&env%5BDATABASE_URL%5D=)<br>
+[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/apps/deploy?repository=https%3A%2F%2Fgithub.com%2FTOXIC-DEVIL%2FLeon&type=git&branch=master&env%5BADMINS%5D=&name=leon&env%5BRBG_API_KEY%5D=&env%5BMODE%5D=private&env%5BSESSION%5D=&env%5BPRERIX%5D=!&env%5BPLATFORM%5D=koyeb&env%5BDATABASE_URL%5D=)<br>
 **Please get DATABASE_URL from [here](https://www.cockroachlabs.com/) if you are deploying to koyeb.**
 
 ### Thanks To:
