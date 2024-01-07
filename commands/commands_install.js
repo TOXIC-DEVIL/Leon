@@ -14,19 +14,20 @@ module.exports = {
       return await msg.reply({ text: '*Invalid url, enter a valid raw url of command to install command!*' });
     }
     text = text.includes('raw') ? text : (text.endsWith('/') ? (text+'raw') : (text+'/raw'));
+    let name = '';
     try {
      let content = await parseJson(text);
      if (!/module|exports|command|func|(sock|msg|text)/.test(content)) {
       return await msg.reply({ text: '*The command must follow the syntax!*' });
      }
-     let name = content.match(/command:\s*'([^']+)'/)[1];
-     allCommands().map(async (cmd) => {
-      if (cmd.name == name) return await msg.reply({ text: '*A command already exists with this name!*' });
-     });
+     name = content.match(/command:\s*'([^']+)'/)[1];
     } catch (e) {
-      console.log(e);
-      return await msg.reply({ text: '*Invalid url, enter a valid raw url of command to install command!*' });
+     console.log(e);
+     return await msg.reply({ text: '*Invalid url, enter a valid raw url of command to install command!*' });
     }
+    allCommands().map(async (cmd) => {
+      if (cmd.name == name) return await msg.reply({ text: '*A command already exists with this name!*' });
+    });
     fs.writeFileSync(__dirname + '/' + name + '.js', content)
     try {
       require(__dirname + '/' + name);
