@@ -14,7 +14,7 @@ module.exports = {
       return await msg.reply({ text: '*Invalid url, enter a valid raw url of command to install command!*' });
     }
     let content = await parseJson(text);
-    if (!/module\.exports.*command.*func.*(sock|msg).*\{.*\}/.test(content)) {
+    if (!/module|exports|command|func|(sock|msg|text)/.test(content)) {
       return await msg.reply({ text: '*The command must follow the syntax!*' });
     }
     let name = content.match(/command:\s*'([^']+)'/)[1];
