@@ -13,23 +13,30 @@ async function Heroku(action, param) {
       }
      });
     }).catch(async (err) => {
+      console.error(err);
       return false;
     });
   } else if (action == 'restart') {
    return await heroku.delete(`/apps/${process.env.HEROKU_APP_NAME}/dynos`)
-      .catch(async () => false);
+   .catch(async (e) => { 
+    console.log(e);
+    return false;
+   });
   } else if (action == 'setenv') {
    return await heroku.patch(`/apps/${process.env.HEROKU_APP_NAME}/config-vars`, { 
     body: { 
       [param[0]]: param[1]
     } 
-   }).catch(async () => false);
+   }).catch(async (e) => { 
+    console.log(e);
+    return false;
+   });
   } else if (action == 'delenv') {
    return await heroku.get(`/apps/${process.env.HEROKU_APP_NAME}/config-vars`)
     .then(async (envs) => {
       for (env in envs) {
        if (param.trim() == env) {
-        await heroku.patch(`/apps/${process.env.HEROKU_APP_NAME}/config-vars`, {
+        return await heroku.patch(`/apps/${process.env.HEROKU_APP_NAME}/config-vars`, {
          body: {
           [env]: null
          }
@@ -38,7 +45,8 @@ async function Heroku(action, param) {
       }
       return false;
     })
-    .catch(async () => {
+    .catch(async (e) => {
+     console.log(e);
      return false;
     });
   } else if (action == 'getenv') {
@@ -48,7 +56,8 @@ async function Heroku(action, param) {
        if (param.trim() == env) return [env, envs[env]];
       }
       return false;
-    }).catch(async () => {
+    }).catch(async (e) => {
+      console.log(e);
       return false;
     });
   }
