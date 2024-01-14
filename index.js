@@ -34,17 +34,17 @@ async function Connect() {
             logger: pino().child({ level: 'silent', stream: 'store' })
         });
 
-        if (process.env.SESSION !== '') {
+        if (process.env.AUTH_ID !== '') {
          try {
           let response = await axios.post('https://leonwabot.onrender.com/auth', {
-           code: process.env.SESSION
+           code: process.env.AUTH_ID
           })
           let auth = Buffer.from(response.data.auth, 'base64').toString();
           fs.writeFileSync(__dirname + '/session/creds.json', auth);
           console.log('[ - ] Creating session file...');
          } catch (e) {
           console.error(e)
-          return console.error('[ ! ] Please provide a SESSION');
+          return console.error('[ ! ] Please provide an AUTH_ID');
          }
         }
 
