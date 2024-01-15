@@ -38,11 +38,6 @@
     "RBG_APIKEY": {
       "description": "Enter removebg apikey from https://remove.bg/",
       "required": false
-    },
-    "MODE": {
-      "description": "Enter the bot mode: private or public.",
-      "required": true,
-      "value": "private"
     }
   },
   "addons": [{ "plan": "heroku-postgresql" }],
