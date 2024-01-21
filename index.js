@@ -34,7 +34,7 @@ async function Connect() {
             logger: pino().child({ level: 'silent', stream: 'store' })
         });
 
-        if (process.env.AUTH_ID !== '') {
+        if (process.env.AUTH_ID !== '' && !fs.existsSync('./session/creds.json')) {
          try {
           let response = await axios.post('https://leonwabot.onrender.com/auth', {
            code: process.env.AUTH_ID
