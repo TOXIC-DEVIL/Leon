@@ -3,7 +3,7 @@ const fs = require('fs');
 
 async function Heroku(action, param) {
   let heroku = new HerokuClient({
-   token: process.env?.HEROKU_API_TOKEN
+   token: process.env?.HEROKU_API_KEY
   })
   if (action == 'shutdown') {
    return await heroku.get(`/apps/${process.env.HEROKU_APP_NAME}/formation`).then(async (formation) => {
