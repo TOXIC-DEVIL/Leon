@@ -1,7 +1,7 @@
 {
   "name": "Leon",
   "version": "1.0.0",
-  "description": "WhatsApp Userbot",
+  "description": "WhatsApp Bot.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -36,7 +36,7 @@
     "sequelize": "^6.35.1",
     "sqlite3": "^5.1.6",
     "translate-google-api": "^1.0.4",
-    "ytdl-core": "^4.11.5",
+    "youtubedl-core": "^4.11.7",
     "yt-search": "^2.10.4"
   }
 }
