@@ -1,5 +1,5 @@
 const fs = require('fs');
-const ytdl = require('ytdl-core');
+const ytdl = require('youtubedl-core');
 
 module.exports = {
   command: 'video',
