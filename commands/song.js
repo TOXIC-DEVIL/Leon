@@ -1,6 +1,6 @@
 const fs = require('fs');
 const yt = require('yt-search');
-const ytdl = require('ytdl-core');
+const ytdl = require('youtubedl-core');
 
 module.exports = {
   command: 'song',
