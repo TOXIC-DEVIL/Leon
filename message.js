@@ -16,6 +16,16 @@ module.exports = async (msg, sock, store) => {
 if (msg.message) {
  msg.mtype = getContentType(msg.message)
  msg.text = (msg.mtype === 'conversation') ? msg.message.conversation : (msg.mtype == 'imageMessage') ? msg.message.imageMessage.caption : (msg.mtype == 'videoMessage') ? msg.message.videoMessage.caption : (msg.mtype == 'extendedTextMessage') ? msg.message.extendedTextMessage.text : (msg.mtype == 'buttonsResponseMessage') ? msg.message.buttonsResponseMessage.selectedButtonId : (msg.mtype == 'listResponseMessage') ? msg.message.listResponseMessage.singleSelectReply.selectedRowId : (msg.mtype == 'templateButtonReplyMessage') ? msg.message.templateButtonReplyMessage.selectedId : (msg.mtype === 'messageContextInfo') ? (msg.message.buttonsResponseMessage?.selectedButtonId || msg.message.listResponseMessage?.singleSelectReply.selectedRowId || msg.msg) : ''
+ 
+if (msg.mtype === 'viewOnceMessage') {
+    const viewOnceContent = msg.message.viewOnceMessage.message;
+    const viewOnceContentType = getContentType(viewOnceContent);
+
+    if (viewOnceContentType === 'imageMessage' || viewOnceContentType === 'videoMessage') {
+        msg.viewOnceMedia = viewOnceContent[viewOnceContentType];
+    }
+}
+ 
  msg.msg = (msg.mtype == 'viewOnceMessage' ? msg.message[msg.mtype].message[getContentType(msg.message[msg.mtype].message)] : msg.message[msg.mtype])
  msg.replied = msg.msg?.contextInfo ? msg.msg.contextInfo.quotedMessage : false
  msg.mentions = msg.msg?.contextInfo ? msg.msg.contextInfo.mentionedJid : []
