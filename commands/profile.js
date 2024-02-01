@@ -4,6 +4,7 @@ const { convertTimestamp } = require('../helpers/utils');
 module.exports = {
   command: 'profile',
   info: 'Gets profile information of replied or mentioned user.',
+  private: false,
   func: async (sock, msg, text) => {
     let chat = msg.replied ? msg.replied.sender : msg.mentions.length > 0 ? msg.mentions[0] : msg.chat;
     let name, about, pp, id, number;
