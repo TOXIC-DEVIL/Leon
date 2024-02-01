@@ -3,6 +3,7 @@ const { Users } = require('../index');
 module.exports = {
   command: 'bc',
   info: 'Broadcasts replied message to all users.',
+  private: true,
   func: async (sock, msg, text) => {
     if (!msg.replied) return await msg.reply({ text: '*Please reply to any message!*' });
     let users = await Users.findAll();
