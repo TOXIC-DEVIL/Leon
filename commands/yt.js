@@ -3,6 +3,7 @@ const yt = require('yt-search');
 module.exports = {
   command: 'yts',
   info: 'Searches video in YouTube for give query.',
+  private: false,
   func: async (sock, msg, text) => {
    if (!text) return await msg.reply({ text: '*Please enter your query to search in YouTube!*' });
    let mesaj = await msg.reply({ text: '*Searching...*' });
