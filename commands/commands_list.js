@@ -3,6 +3,7 @@ const command = require('../helpers/database/commands');
 module.exports = {
   command: 'commands',
   info: 'Shows installed external commands list.',
+  private: true,
   func: async (sock, msg, text) => {
     let list = '*Installed external commands are:*\n\n';
     let l = await command.list();
