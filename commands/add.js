@@ -1,6 +1,7 @@
 module.exports = {
   command: 'add',
   info: 'Adds user to group from entered number.',
+  private: false,
   func: async (sock, msg, text) => {
     if (!msg.isGroup) return await msg.reply({ text: '*This command can only be used in group!*' });
     if (!text && !msg.replied) return await msg.reply({ text: '*Please enter a number with +country code to add!*' });
