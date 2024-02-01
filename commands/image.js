@@ -3,6 +3,7 @@ const g_i_s = require('g-i-s');
 module.exports = {
   command: 'image',
   info: 'Searches image in google for given query.',
+  private: false,
   func: async (sock, msg, text) => {
     if (!text) return await msg.reply({ text: '*Please enter your query to search for image in google!*' });
     let cl;
