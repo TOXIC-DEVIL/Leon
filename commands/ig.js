@@ -16,8 +16,8 @@ module.exports = {
           return await msg.reply({ video: ig.url });
         }
       }
-    }).catch((e) => {
-       return await msg.reply({ text: '*Unable to download instagram media!*' });
+    }).catch(async (e) => {
+       return await msg.reply({ text: '*Currently unavailable!*' });
     })
   }
 };
