@@ -3,6 +3,7 @@ const { instagram } = require('../helpers/ig');
 module.exports = {
   command: 'ig',
   info: 'Downloads instagram post/reels/stories from given url.',
+  private: false,
   func: async (sock, msg, text) => {
     if (!text) return await msg.reply({ text: '*Please enter instagram post, reels or story url!*' });
     await instagram(text)
@@ -15,6 +16,8 @@ module.exports = {
           return await msg.reply({ video: ig.url });
         }
       }
+    }).catch((e) => {
+       return await msg.reply({ text: '*Unable to download instagram media!*' });
     })
   }
 };
