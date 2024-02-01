@@ -139,7 +139,7 @@ async function Connect() {
 
             let admins = (process.env?.ADMINS?.includes(',') ? process.env?.ADMINS?.split(',').map(admin => admin.trim() + '@s.whatsapp.net') : [process.env?.ADMINS?.trim() + '@s.whatsapp.net']) || [];
             allCommands().forEach(async (command) => {
-             if ((process.env.MODE === 'private' && (msg.fromMe || admins.includes(msg.sender))) || (process.env.MODE === 'public' && (!command.private || msg.fromMe || admins.includes(msg.sender)))) {
+             if ((process.env.MODE === 'private' && (msg.fromMe || admins.includes(msg.sender))) || (process.env.MODE === 'public' && (!command.private || (msg.fromMe || admins.includes(msg.sender))))) {
               let prefix = process.env?.PREFIX || '/';
               let text = (msg.text.split(command.command)[1])?.trim();
               if (msg.text.startsWith(prefix + command.command)) return command.func(sock, msg, text);
@@ -162,7 +162,7 @@ function allCommands() {
  fs.readdirSync('./commands').forEach(file => {
   if (file.endsWith('.js')) {
    let command = require('./commands/' + file);
-   commands.push({ command: command.command, info: command.info, func: command.func });
+   commands.push({ command: command.command, info: command.info, private: command.private, func: command.func });
   }
  });
  return commands;
