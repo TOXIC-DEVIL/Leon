@@ -5,6 +5,7 @@ const ytdl = require('youtubedl-core');
 module.exports = {
   command: 'song',
   info: 'Downloads song from given lyric.',
+  private: false,
   func: async (sock, msg, text) => {
     if (!text) return await msg.reply({ text: '*Please enter a song lyric!*' });
     text += text.includes('http') ? '' : ' song';
