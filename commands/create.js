@@ -1,6 +1,7 @@
 module.exports = {
   command: 'create',
   info: 'Creates a group with provided name and participants.',
+  private: false,
   func: async (sock, msg, text) => {
     if (!text) return await msg.reply({ text: '*Please enter a subject for group!*' });
     let participants = msg.mentions.length > 0 ? msg.mentions : msg.replied && msg.replied.sender !== msg.me ? [msg.replied.sender] : !msg.isGroup ? [msg.chat] : [msg.sender];
