@@ -3,6 +3,7 @@ const { parseJson } = require('../helpers/utils');
 module.exports = {
   command: 'ud',
   info: 'Searches definition for your term in urban dictionary.',
+  private: false,
   func: async (sock, msg, text) => {
     if (!text) return await msg.reply({ text: '*Please enter a term to define!*' });
     text = text.toLowerCase();
