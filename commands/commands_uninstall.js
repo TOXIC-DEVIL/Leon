@@ -5,6 +5,7 @@ const { Heroku } = require('../helpers/heroku');
 module.exports = {
   command: 'uninstall',
   info: 'Uninstalls an external command from given name.',
+  private: true,
   func: async (sock, msg, text) => {
     if (!text) return await msg.reply({ text: '*Please enter an installed external command name to uninstall!*' });
     let res = await uninstall(text);
