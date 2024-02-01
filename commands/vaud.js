@@ -4,6 +4,7 @@ const fs = require('fs');
 module.exports = {
   command: 'vaud',
   info: 'Converts video to audio.',
+  private: false,
   func: async (sock, msg, text) => {
    if (!msg.replied) return await msg.reply({ text: '*Please reply to any video!*' });
    if (!msg.replied.video) return await msg.reply({ text: '*Reply to any video!*' });
