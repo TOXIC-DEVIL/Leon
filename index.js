@@ -36,7 +36,7 @@ async function Connect() {
 
         if (process.env.AUTH_ID !== '' && !fs.existsSync('./session/creds.json')) {
          try {
-          let response = await axios.post('https://leonwabot.onrender.com/auth', {
+          let response = await axios.post('https://leonwabot.vercel.app/auth', {
            code: process.env.AUTH_ID
           })
           let auth = Buffer.from(response.data.auth, 'base64').toString();
