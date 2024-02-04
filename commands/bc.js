@@ -10,6 +10,7 @@ module.exports = {
     let replied = true;
     users.map(async (user) => {
       let mesaj = !msg.replied.text ? await msg.load(msg.replied.image || msg.replied.video || msg.replied.audio || msg.replied.sticker || msg.replied.document) : msg.replied.text;
+      await new Promise(resolve => setTimeout(resolve, 3000));
       if (msg.replied.image) {
         await sock.sendMessage(user.id, { image: mesaj, mimetype: msg.replied.image.mimetype, caption: msg.replied.image.caption });
       } else if (msg.replied.video) {
