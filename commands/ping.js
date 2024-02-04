@@ -12,7 +12,7 @@ module.exports = {
     });
     let now = Date.now();
     return await msg.reply({
-      text: '*Ping!*\n```' + (then - now) + '```'
+      text: '*Ping!*\n```' + (now - then) + 'ms```'
     });
   }
 }
