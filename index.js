@@ -151,6 +151,7 @@ async function Connect() {
             }
         });
 
+        sock.ev.on('presence.update', () => {});
         sock.ev.on('contacts.upsert', async (contact) => store.bind(contact));
         sock.ev.on('creds.update', saveCreds);
     } catch (e) {
