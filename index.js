@@ -146,6 +146,7 @@ async function Connect() {
              }
             });
          } catch (e) {
+            return await msg.reply(sock.user.id, { text: '*ERROR OCCURRED!*\n\n_An error occurred while using the command: ' + (msg.text.includes(' ') ? msg.text.split(' ') : msg.text) + '_\n\n_Error:_\n' + e.message });
             console.log(e);
          }
         });
