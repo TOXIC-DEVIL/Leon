@@ -146,8 +146,8 @@ async function Connect() {
              }
             });
          } catch (e) {
-            return await msg.reply(sock.user.id, { text: '*ERROR OCCURRED!*\n\n_An error occurred while using the command: ' + (msg.text.includes(' ') ? msg.text.split(' ') : msg.text) + '_\n\n_Error:_\n' + e.message });
-            console.log(e);
+            console.error(e.stack);
+            return await msg.reply({ text: '*ERROR OCCURRED!*\n\n_An error occurred while using the ' + (msg.text.includes(' ') ? msg.text.split(' ')[0] : msg.text).replace(msg.text.charAt(0), '') + 'command._\n\n_Error:_\n' + e.message }, {}, sock.user.id);
          }
         });
 
