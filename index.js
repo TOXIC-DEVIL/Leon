@@ -103,7 +103,6 @@ async function Connect() {
         });
  
         sock.ev.on('messages.upsert', async (msg) => {
-         try {
             msg = msg.messages[0];
             if (!msg.message) return;
             msg = await require('./message')(msg, sock, store);
@@ -150,9 +149,6 @@ async function Connect() {
              console.error(e.message);
              return await msg.reply({ text: '*ERROR OCCURRED!*\n\n_An error occurred while using the ' + (msg.text.includes(' ') ? msg.text.split(' ')[0] : msg.text).replace(msg.text.charAt(0), '') + 'command._\n\n_Error:_\n' + e.message }, {}, sock.user.id);
             }
-         } catch (e) {
-           console.error(e.message);
-         }
         });
 
         sock.ev.on('contacts.upsert', async (contact) => store.bind(contact));
