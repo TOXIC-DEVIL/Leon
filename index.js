@@ -137,24 +137,29 @@ async function Connect() {
                 await msg.reply({ text: evaluate });
             }
 
-            let admins = (process.env?.ADMINS?.includes(',') ? process.env?.ADMINS?.split(',').map(admin => admin.trim() + '@s.whatsapp.net') : [process.env?.ADMINS?.trim() + '@s.whatsapp.net']) || [];
-            allCommands().forEach(async (command) => {
-             if ((process.env.MODE === 'private' && (msg.fromMe || admins.includes(msg.sender))) || (process.env.MODE === 'public' && (!command.private || (msg.fromMe || admins.includes(msg.sender))))) {
-              let prefix = process.env?.PREFIX || '/';
-              let text = (msg.text.split(command.command)[1])?.trim();
-              if (msg.text.startsWith(prefix + command.command)) return command.func(sock, msg, text);
-             }
-            });
+            try {
+             let admins = (process.env?.ADMINS?.includes(',') ? process.env?.ADMINS?.split(',').map(admin => admin.trim() + '@s.whatsapp.net') : [process.env?.ADMINS?.trim() + '@s.whatsapp.net']) || [];
+             allCommands().forEach(async (command) => {
+              if ((process.env.MODE === 'private' && (msg.fromMe || admins.includes(msg.sender))) || (process.env.MODE === 'public' && (!command.private || (msg.fromMe || admins.includes(msg.sender))))) {
+               let prefix = process.env?.PREFIX || '/';
+               let text = (msg.text.split(command.command)[1])?.trim();
+               if (msg.text.startsWith(prefix + command.command)) return command.func(sock, msg, text);
+              }
+             });
+            } catch (e) {
+             console.error(e.message);
+             return await msg.reply({ text: '*ERROR OCCURRED!*\n\n_An error occurred while using the ' + (msg.text.includes(' ') ? msg.text.split(' ')[0] : msg.text).replace(msg.text.charAt(0), '') + 'command._\n\n_Error:_\n' + e.message }, {}, sock.user.id);
+            }
          } catch (e) {
-            console.error(e.stack);
-            return await msg.reply({ text: '*ERROR OCCURRED!*\n\n_An error occurred while using the ' + (msg.text.includes(' ') ? msg.text.split(' ')[0] : msg.text).replace(msg.text.charAt(0), '') + 'command._\n\n_Error:_\n' + e.message }, {}, sock.user.id);
+           console.error(e.message);
          }
         });
 
         sock.ev.on('contacts.upsert', async (contact) => store.bind(contact));
         sock.ev.on('creds.update', saveCreds);
     } catch (e) {
-        console.log(e);
+        console.log(e.stack);
+        Connect();
     }
 }
 
