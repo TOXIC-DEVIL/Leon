@@ -143,7 +143,7 @@ async function Connect() {
              let prefix = process.env?.PREFIX || '/';
              let text = (msg.text.match(
               new RegExp(`^${prefix}${command.command}\\s*(.*)`)
-             )[1])?.trim();
+             )?[1])?.trim();
              if (msg.text.startsWith(prefix + command.command)) return command.func(sock, msg, text);
             }
            });
