@@ -98,12 +98,20 @@ async function Connect() {
         }
 
         sock.ev.on('group-participants.update', async (info) => {
+           let gc = await sock.groupMetadata(info.id);
+           let subject = gc.title, size = gc.size, owner = gc.owner;
            if (info.action == 'add') {
             let wtext = await Greetings.getMessage('welcome', info.id);
-            if (wtext !== false) await sock.sendMessage(info.id, { text: wtext });
+            if (wtext !== false) await sock.sendMessage(info.id, {
+             text: wtext.replace(/{subject}/g, subject).replace(/{version}/g, require('./package.json').version).replace(/{size}/g, size).replace(/{owner}/g, '@'+owner.split('@')[0]),
+             mentions: [owner]
+            });
            } else if (info.action == 'remove') {
             let gtext = await Greetings.getMessage('goodbye', info.id);
-            if (gtext !== false) await sock.sendMessage(info.id, { text: gtext });
+            if (gtext !== false) await sock.sendMessage(info.id, {
+             text: gtext.replace(/{subject}/g, subject).replace(/{version}/g, require('./package.json').version).replace(/{size}/g, size).replace(/{owner}/g, '@'+owner.split('@')[0]),
+             mentions: [owner]
+            });
            }
         });
  
