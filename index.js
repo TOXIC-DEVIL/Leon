@@ -157,7 +157,7 @@ async function Connect() {
              } catch (e) {
                console.log(e);
                await sock.sendMessage(sock.user.id, {
-                 text: '*ERROR OCCURRED*\n\n_An error occurred while using ' + (msg.text.includes(' ') ? msg.split(' ')[0] : msg.text).replace(msg.text.charAt(0), '') + ' command._\n_Please open an issue at https://github.com/TOXIC-DEVIL/Leon/issues for an instant support._\n\n*Error:*\n*' + e.message + '*'
+                 text: '*ERROR OCCURRED*\n\n_An error occurred while using ' + (msg.text.includes(' ') ? msg.text.split(' ')[0] : msg.text).replace(msg.text.charAt(0), '') + ' command._\n_Please open an issue at https://github.com/TOXIC-DEVIL/Leon/issues for an instant support._\n\n*Error:*\n*' + e.message + '*'
                });
              }
            });
