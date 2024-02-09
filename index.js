@@ -1,5 +1,5 @@
 'use strict';
-const { default: makeWASocket, useMultiFileAuthState, fetchLatestBaileysVersion, makeInMemoryStore, getContentType, generateForwardMessageContent, downloadContentFromMessage, jidDecode } = require('@whiskeysockets/baileys');
+const { default: makeWASocket, useMultiFileAuthState, fetchLatestBaileysVersion, makeInMemoryStore, getContentType, jidNormalizedUser, generateForwardMessageContent, downloadContentFromMessage, jidDecode } = require('@whiskeysockets/baileys');
 const { Sequelize, DataTypes } = require('sequelize');
 const { list, uninstall } = require('./helpers/database/commands');
 const { getFilter } = require('./helpers/database/filter');
@@ -56,7 +56,12 @@ async function Connect() {
             markOnlineOnConnect: false,
             browser: ['Leon', 'Chrome', '1.0.0'],
             auth: state,
-            version: version
+            version: version,
+            getMessage: async (key) => {
+              let jid = jidNormalizedUser(key.remoteJid)
+              let msg = await store.loadMessage(jid, key.id)
+              return msg?.message || ""
+            }
         });
         store.bind(sock.ev);
 
