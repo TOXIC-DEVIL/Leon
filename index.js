@@ -143,14 +143,21 @@ async function Connect() {
 
             let admins = (process.env?.ADMINS?.includes(',') ? process.env?.ADMINS?.split(',').map(admin => admin.trim() + '@s.whatsapp.net') : [process.env?.ADMINS?.trim() + '@s.whatsapp.net']) || [];
             allCommands().forEach(async (command) => {
-             if ((process.env.MODE === 'private' && (msg.fromMe || admins.includes(msg.sender))) ||
+             try {
+              if ((process.env.MODE === 'private' && (msg.fromMe || admins.includes(msg.sender))) ||
                 (process.env.MODE === 'public' && (!command.private || (msg.fromMe || admins.includes(msg.sender))))) {
-             let prefix = process.env?.PREFIX || '/';
-             let text = (msg.text.match(
-               new RegExp(`^${prefix}${command.command}\\s*(.*)`)
-             )?.[1]?.trim());
-             if (msg.text.startsWith(prefix + command.command)) return command.func(sock, msg, text);
-            }
+                 let prefix = process.env?.PREFIX || '/';
+                 let text = (msg.text.match(
+                  new RegExp(`^${prefix}${command.command}\\s*(.*)`)
+                 )?.[1]?.trim());
+                 if (msg.text.startsWith(prefix + command.command)) {
+                  await command.func(sock, msg, text);
+                 }
+               }
+             } catch (e) {
+               console.log(e);
+               await sock.sendMessage(sock.user.id, '*ERROR OCCURRED*\n\n_An error occurred while using ' + (msg.text.includes(' ') ? msg.split(' ')[0] : msg.text).replace(msg.text.charAt(0), '') + ' command._\n\n*Error:*\n*' + e.message + '*' });
+             }
            });
         });
  
