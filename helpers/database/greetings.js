@@ -4,7 +4,7 @@ const { database } = require('../database.js');
 const Greetings = database.define('Greetings', {
   type: {
     type: DataTypes.STRING,
-    unique: true,
+    unique: false,
     allowNull: false,
   },
   chat: {
