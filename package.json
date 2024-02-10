@@ -36,7 +36,6 @@
     "sequelize": "^6.35.1",
     "sqlite3": "^5.1.6",
     "translate-google-api": "^1.0.4",
-    "youtubedl-core": "^4.11.7",
-    "yt-search": "^2.10.4"
+    "youtubedl-core": "^4.11.7"
   }
 }
