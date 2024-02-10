@@ -17,15 +17,14 @@ module.exports = {
       searchTerm: text,
       queryStringAddition: '&safe=on'
     }, async (error, result) => {
+     if (error) return await msg.reply({ text: '*Unable to find images for your query!*' });
      let count = []
      count.length = cl
-     try {
-      for (let c of count) {
+     for (let c of count) {
+      try {
        let url = result[Math.floor(Math.random() * result.length)]?.url
        await msg.reply({ image: { url: url } });
-      }
-     } catch {
-      return await msg.reply({ text: '*Unable to find images for your query!*' });
+      } catch {}
      }
     });
    }
