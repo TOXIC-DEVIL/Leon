@@ -14,7 +14,8 @@ module.exports = {
      let json = await parseJson('https://toxicdevilapi.vercel.app/search/youtube?query=' + text);
      let video = json.result.filter((v) => v.type == 'video')[0].url;
      res = video.split('/').slice(-1)[0].replace('watch?v=', '');
-    } catch {
+    } catch (e) {
+     console.log(e);
      return await msg.reply({ edit: { key: mesaj.key, text: '*Unable to find any song in this lyric!*' } });
     }
     let file = './' + res + '.mp3'
