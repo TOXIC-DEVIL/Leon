@@ -3,6 +3,7 @@ const { toSticker, addExif, getExif } = require('../helpers/sticker');
 module.exports = {
   command: 'exif',
   info: 'Set exif to a sticker.',
+  private: false,
   func: async (sock, msg, text) => {
     if (!msg.replied || !msg.replied.sticker && !msg.replied.image && !msg.replied.video) return await msg.reply({ text: '*Please reply to any sticker!*' });
     let [packname, author] = text.split('/');

@@ -1,6 +1,7 @@
 module.exports = {
   command: 'promote',
   info: 'Gives admin authority to replied or mentioned user.',
+  private: false,
   func: async (sock, msg, text) => {
     if (!msg.isGroup) return await msg.reply({ text: '*This command can only be used in groups!*' });
     if (!text && !msg.replied) return await msg.reply({ text: '*Please reply or mention any user!*' });

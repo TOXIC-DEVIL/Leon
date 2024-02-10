@@ -1,6 +1,7 @@
 module.exports = {
   command: 'join',
   info: 'Joins the group with given link.',
+  private: true,
   func: async (sock, msg, text) => {
     let link = text !== '' ? text : msg.replied.text ? msg.replied.text : false;
     if (!link) return await msg.reply({ text: '*Please enter or reply to any WhatsApp group link to join!*' });

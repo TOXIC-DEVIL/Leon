@@ -7,6 +7,7 @@ ffmpeg.setFfmpegPath(installer.path);
 module.exports = {
   command: 'trim',
   info: 'Trims replied video or audio from given timeline.',
+  private: false,
   func: async (sock, msg, text) => {
     if (!msg.replied) return await msg.reply({ text: '*Please reply to any audio or video!*' });
     if (!text) return await msg.reply({ text: '*Please give a timeline to trim!*\n\n*Example:*\n*' + (process.env.PREFIX || '/') + 'cut 0:05 0:09*\n*' + (process.env.PREFIX || '/') + 'cut 1:05 1:30*' });

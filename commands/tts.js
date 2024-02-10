@@ -3,6 +3,7 @@ const gtts = require('google-tts-api');
 module.exports = {
   command: 'tts',
   info: 'Converts text to speech using Google Text-To-Speech.',
+  private: false,
   func: async (sock, msg, text) => {
     let ttsText = text !== '' ? text : msg.replied && msg.replied.text ? msg.replied.text : false
     if (!ttsText) return await msg.reply({ text: '*Please enter or reply to any text to speak!*' });

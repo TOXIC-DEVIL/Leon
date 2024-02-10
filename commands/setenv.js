@@ -3,6 +3,7 @@ const { Heroku } = require('../helpers/heroku');
 module.exports = {
   command: 'setenv',
   info: 'Sets environment variable with given key and value.',
+  private: true,
   func: async (sock, msg, text) => {
     if ((process.env?.PLATFORM).toLowerCase() !== 'heroku') return await msg.reply({ text: '*You must deploy bot on heroku for bot administrative commands.*' });
     if (!text) return await msg.reply({ text: '*Please enter key and value by splitting with space character!*\n\n_You can insert the value in "<double quotes>" if value includes space character._' });

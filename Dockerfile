@@ -1,19 +1,9 @@
 FROM node
 
-RUN apt-get update && \
-  apt-get install -y \
-  ffmpeg \
-  imagemagick \
-  webp && \
-  apt-get upgrade -y && \
-  rm -rf /var/lib/apt/lists/*
-
+RUN apt-get update && apt-get install -y
 COPY package.json .
-
-RUN npm install && npm update
-
+RUN npm install
 COPY . .
-
 EXPOSE 8080
 
 CMD ["node", "index.js"]

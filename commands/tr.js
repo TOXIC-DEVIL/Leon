@@ -3,6 +3,7 @@ const translate = require('translate-google-api');
 module.exports = {
   command: 'tr',
   info: 'Translates replied message from auto-dected language to provided language.',
+  private: false,
   func: async (sock, msg, text) => {
     if (msg.text.split(' ')[0].includes('trim')) return;
     if (!msg.replied || !msg.replied.text) return await msg.reply({ text: '*Please reply to any text!*' });

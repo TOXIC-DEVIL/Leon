@@ -4,6 +4,7 @@ const fs = require('fs');
 module.exports = {
   command: 'simg',
   info: 'Converts sticker to image.',
+  private: false,
   func: async (sock, msg, text) => {
    if (!msg.replied) return await msg.reply({ text: '*Please reply to any sticker!*' });
    if (!msg.replied.sticker) return await msg.reply({ text: '*Reply to any sticker only!*' });

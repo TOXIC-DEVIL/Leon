@@ -6,6 +6,7 @@ const { allCommands } = require('../index');
 module.exports = {
   command: 'install',
   info: 'Installs an external command from raw url.',
+  private: true,
   func: async (sock, msg, text) => {
     if (!text) return await msg.reply({ text: '*Please enter a raw url of command to install command!*' });
     try {

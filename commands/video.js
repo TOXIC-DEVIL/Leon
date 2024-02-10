@@ -1,9 +1,10 @@
 const fs = require('fs');
-const ytdl = require('ytdl-core');
+const ytdl = require('youtubedl-core');
 
 module.exports = {
   command: 'video',
   info: 'Downloads video from YouTube from its URL.',
+  private: false,
   func: async (sock, msg, text) => {
     if (!text) return await msg.reply({ text: '*Please enter a YouTube video url!*' });
     let ytregex = /https:\/\/(?:www\.)?youtube\.com\/watch\?v=[\w-]+|https:\/\/youtu\.be\/[\w-]+|https:\/\/(?:www\.)?youtube\.com\/shorts\/[\w-]+/i;

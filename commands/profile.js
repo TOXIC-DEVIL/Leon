@@ -4,6 +4,7 @@ const { convertTimestamp } = require('../helpers/utils');
 module.exports = {
   command: 'profile',
   info: 'Gets profile information of replied or mentioned user.',
+  private: false,
   func: async (sock, msg, text) => {
     let chat = msg.replied ? msg.replied.sender : msg.mentions.length > 0 ? msg.mentions[0] : msg.chat;
     let name, about, pp, id, number;
@@ -20,7 +21,12 @@ module.exports = {
       id = String(chat);
       number = id.split('@')[0]
       link = 'https://wa.me/' + number;
-      return await msg.reply({ image: pp, caption: `_Name_ : *${name} ( ${'@' + chat.split('@')[0]} )*\n_About_ : *${about}*\n_ID_ : *${id}*\n_Number_ : *${number}*\n_Chat_ : *${link}*` });
+      return await msg.reply(
+        { 
+          image: { url: pp },
+          caption: `_Name_ : *${name} ( ${'@' + chat.split('@')[0]} )*\n_About_ : *${about}*\n_ID_ : *${id}*\n_Number_ : *${number}*\n_Chat_ : *${link}*`
+        }
+      );
     } else if (chat.includes('us')) {
       let info = await sock.groupMetadata(msg.chat);
       let ts = await convertTimestamp(info.creation);

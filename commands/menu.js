@@ -3,6 +3,7 @@ const { allCommands } = require('../index');
 module.exports = {
   command: 'menu',
   info: '',
+  private: false,
   func: async (sock, msg, text) => {
     let cmd = '';
     allCommands().forEach(async (cm) => {

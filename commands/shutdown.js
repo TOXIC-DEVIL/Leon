@@ -3,6 +3,7 @@ const { Heroku } = require('../helpers/heroku');
 module.exports = {
   command: 'shutdown',
   info: 'Shutdowns the bot.',
+  private: true,
   func: async (sock, msg, text) => {
     if ((process.env?.PLATFORM).toLowerCase() !== 'heroku') return await msg.reply({ text: '*You must deploy bot on heroku for bot administrative commands.*' });
     let shutdown = await Heroku('shutdown');

@@ -8,6 +8,7 @@ const acr = new acrcloud({
 module.exports = {
   command: 'find',
   info: 'Fetches the information of replied song.',
+  private: false,
   func: async (sock, msg, text) => {
    if (!msg.replied) return await msg.reply({ text: '*Please reply to any audio!*' });
    if (!msg.replied.audio) return await msg.reply({ text: '*Reply to any audio only!*' });

@@ -1,5 +1,5 @@
 'use strict';
-const { default: makeWASocket, useMultiFileAuthState, fetchLatestBaileysVersion, makeInMemoryStore, getContentType, generateForwardMessageContent, downloadContentFromMessage, jidDecode } = require('@whiskeysockets/baileys');
+const { default: makeWASocket, useMultiFileAuthState, fetchLatestBaileysVersion, makeInMemoryStore, getContentType, jidNormalizedUser, generateForwardMessageContent, downloadContentFromMessage, jidDecode } = require('@whiskeysockets/baileys');
 const { Sequelize, DataTypes } = require('sequelize');
 const { list, uninstall } = require('./helpers/database/commands');
 const { getFilter } = require('./helpers/database/filter');
@@ -36,7 +36,7 @@ async function Connect() {
 
         if (process.env.AUTH_ID !== '' && !fs.existsSync('./session/creds.json')) {
          try {
-          let response = await axios.post('https://leonwabot.onrender.com/auth', {
+          let response = await axios.post('https://leonwabot.vercel.app/auth', {
            code: process.env.AUTH_ID
           })
           let auth = Buffer.from(response.data.auth, 'base64').toString();
@@ -56,7 +56,12 @@ async function Connect() {
             markOnlineOnConnect: false,
             browser: ['Leon', 'Chrome', '1.0.0'],
             auth: state,
-            version: version
+            version: version,
+            getMessage: async (key) => {
+              let jid = jidNormalizedUser(key.remoteJid)
+              let msg = await store.loadMessage(jid, key.id)
+              return msg?.message || ""
+            }
         });
         store.bind(sock.ev);
 
@@ -93,17 +98,24 @@ async function Connect() {
         }
 
         sock.ev.on('group-participants.update', async (info) => {
+           let gc = await sock.groupMetadata(info.id);
+           let subject = gc.title, size = gc.size, owner = gc.owner;
            if (info.action == 'add') {
             let wtext = await Greetings.getMessage('welcome', info.id);
-            if (wtext !== false) await sock.sendMessage(info.id, { text: wtext });
+            if (wtext !== false) await sock.sendMessage(info.id, {
+             text: wtext.replace(/{subject}/g, subject).replace(/{version}/g, require('./package.json').version).replace(/{size}/g, size).replace(/{owner}/g, '@'+owner.split('@')[0]),
+             mentions: [owner]
+            });
            } else if (info.action == 'remove') {
             let gtext = await Greetings.getMessage('goodbye', info.id);
-            if (gtext !== false) await sock.sendMessage(info.id, { text: gtext });
+            if (gtext !== false) await sock.sendMessage(info.id, {
+             text: gtext.replace(/{subject}/g, subject).replace(/{version}/g, require('./package.json').version).replace(/{size}/g, size).replace(/{owner}/g, '@'+owner.split('@')[0]),
+             mentions: [owner]
+            });
            }
         });
  
         sock.ev.on('messages.upsert', async (msg) => {
-         try {
             msg = msg.messages[0];
             if (!msg.message) return;
             msg = await require('./message')(msg, sock, store);
@@ -137,22 +149,34 @@ async function Connect() {
                 await msg.reply({ text: evaluate });
             }
 
-            let admins = (process.env?.ADMINS?.includes(',') ? process.env?.ADMINS?.split(',').map(admin => admin.trim() + '@s.whatsapp.net') : [process.env?.ADMINS?.trim() + '@s.whatsapp.net']) || true;
-            if (!msg.fromMe && !admins.includes(msg.sender)) return;
+            let admins = (process.env?.ADMINS?.includes(',') ? process.env?.ADMINS?.split(',').map(admin => admin.trim() + '@s.whatsapp.net') : [process.env?.ADMINS?.trim() + '@s.whatsapp.net']) || [];
             allCommands().forEach(async (command) => {
-              let prefix = process.env?.PREFIX || '/';
-              let text = (msg.text.split(command.command)[1])?.trim();
-              if (msg.text.startsWith(prefix + command.command)) return command.func(sock, msg, text);
-            });
-         } catch (e) {
-            console.log(e);
-         }
+             try {
+              if ((process.env.MODE === 'private' && (msg.fromMe || admins.includes(msg.sender))) ||
+                (process.env.MODE === 'public' && (!command.private || (msg.fromMe || admins.includes(msg.sender))))) {
+                 let prefix = process.env?.PREFIX || '/';
+                 let text = (msg.text.match(
+                  new RegExp(`^${prefix}${command.command}\\s*(.*)`)
+                 )?.[1]?.trim());
+                 if (msg.text.startsWith(prefix + command.command)) {
+                  await command.func(sock, msg, text);
+                 }
+               }
+             } catch (e) {
+               console.log(e);
+               await sock.sendMessage(sock.user.id, {
+                 text: '*ERROR OCCURRED*\n\n_An error occurred while using ' + (msg.text.includes(' ') ? msg.text.split(' ')[0] : msg.text).replace(msg.text.charAt(0), '') + ' command._\n_Please open an issue at https://github.com/TOXIC-DEVIL/Leon/issues for an instant support._\n\n*Error:*\n*' + e.message + '*'
+               });
+             }
+           });
         });
-
+ 
+        sock.ev.on('presence.update', () => {});
         sock.ev.on('contacts.upsert', async (contact) => store.bind(contact));
         sock.ev.on('creds.update', saveCreds);
     } catch (e) {
-        console.log(e);
+        console.log(e.stack);
+        Connect();
     }
 }
 
@@ -161,7 +185,7 @@ function allCommands() {
  fs.readdirSync('./commands').forEach(file => {
   if (file.endsWith('.js')) {
    let command = require('./commands/' + file);
-   commands.push({ command: command.command, info: command.info, func: command.func });
+   commands.push({ command: command.command, info: command.info, private: command.private, func: command.func });
   }
  });
  return commands;

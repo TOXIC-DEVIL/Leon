@@ -3,6 +3,7 @@ const { setMessage, getMessage, deleteMessage } = require('../helpers/database/g
 module.exports = {
   command: 'goodbye',
   info: 'Sets or deletes goodbye message.',
+  private: true,
   func: async (sock, msg, text) => {
     if (!msg.isGroup) return await msg.reply({ text: '*This command can only be used in group!*' });
     let message = text !== '' ? text : msg.replied.text ? msg.replied.text : false
