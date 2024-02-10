@@ -11,8 +11,8 @@ module.exports = {
     let mesaj = await msg.reply({ text: '*Searching for song...*' });
     let res = '';
     try {
-     let json = await parseJson('https://toxicdevilapi.vercel.app/search/youtube?query=' + text)
-     let video = json.result.filter((v) => v.type == 'video')[0].url
+     let json = await parseJson('https://toxicdevilapi.vercel.app/search/youtube?query=' + text);
+     let video = json.result.filter((v) => v.type == 'video')[0].url;
      res = video.split('/').slice(-1)[0].replace('watch?v=', '');
     } catch {
      return await msg.reply({ edit: { key: mesaj.key, text: '*Unable to find any song in this lyric!*' } });
