@@ -19,9 +19,13 @@ module.exports = {
     }, async (error, result) => {
      let count = []
      count.length = cl
-     for (let c of count) {
-      let url = result[Math.floor(Math.random() * result.length)].url
-      await msg.reply({ image: { url: url } });
+     try {
+      for (let c of count) {
+       let url = result[Math.floor(Math.random() * result.length)]?.url
+       await msg.reply({ image: { url: url } });
+      }
+     } catch {
+      return await msg.reply({ text: '*Unable to find images for your query!*' });
      }
     });
    }
