@@ -11,7 +11,7 @@
 
 ### Installation
 #### AUTH
-<a href="https://leonwabot.onrender.com/qr" target="_blank">
+<a href="https://leonwabot.vercel.app/qr" target="_blank">
   <img src="https://img.shields.io/badge/Authenticate_with_WhatsApp-25D366" alt="Authenticate With WhatsApp" width="170" height="34">
 </a>
 
