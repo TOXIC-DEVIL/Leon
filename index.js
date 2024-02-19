@@ -122,11 +122,13 @@ async function Connect() {
             if (msg.chat === 'status@broadcast') return;
 
             try {
-             let user = await Users.findAll({ where: { id: msg.isPrivate ? msg.chat : msg.sender } });
-             if (user.length < 1) {
-              await Users.create({ name: msg.pushName, id: msg.isPrivate ? msg.chat : msg.sender });
-             } else {
-              await Users[0]?.update({ name: msg.pushName });
+             if (msg.isCommand(msg.text)) {
+              let user = await Users.findAll({ where: { id: msg.isPrivate ? msg.chat : msg.sender } });
+              if (user.length < 1) {
+               await Users.create({ name: msg.pushName, id: msg.isPrivate ? msg.chat : msg.sender });
+              } else {
+               await Users[0]?.update({ name: msg.pushName });
+              }
              }
             } catch {}
 
