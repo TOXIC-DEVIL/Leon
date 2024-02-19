@@ -123,7 +123,7 @@ async function Connect() {
 
             try {
              let cmd = (msg.text.includes(' ') ? msg.text.split(' ')[0] : msg.text).replace(charAt(0), '');
-             if (allCommands(cmd)) {
+             if (allCommands(cmd) || msg.isPrivate) {
               let user = await Users.findAll({ where: { id: msg.isPrivate ? msg.chat : msg.sender } });
               if (user.length < 1) {
                await Users.create({ name: msg.pushName, id: msg.isPrivate ? msg.chat : msg.sender });
