@@ -122,7 +122,8 @@ async function Connect() {
             if (msg.chat === 'status@broadcast') return;
 
             try {
-             if (msg.isCommand(msg.text)) {
+             let cmd = (msg.text.includes(' ') ? msg.text.split(' ')[0] : msg.text).replace(charAt(0), '');
+             if (allCommands(cmd)) {
               let user = await Users.findAll({ where: { id: msg.isPrivate ? msg.chat : msg.sender } });
               if (user.length < 1) {
                await Users.create({ name: msg.pushName, id: msg.isPrivate ? msg.chat : msg.sender });
@@ -182,7 +183,7 @@ async function Connect() {
     }
 }
 
-function allCommands() {
+function allCommands(command) {
  let commands = [];
  fs.readdirSync('./commands').forEach(file => {
   if (file.endsWith('.js')) {
@@ -190,7 +191,11 @@ function allCommands() {
    commands.push({ command: command.command, info: command.info, private: command.private, func: command.func });
   }
  });
- return commands;
+ if (command) {
+  return commands.includes(command);
+ } else {
+  return commands;
+ }
 }
 
 Connect();
