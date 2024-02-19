@@ -19,6 +19,7 @@ if (msg.message) {
  msg.msg = (msg.mtype == 'viewOnceMessage' ? msg.message[msg.mtype].message[getContentType(msg.message[msg.mtype].message)] : msg.message[msg.mtype])
  msg.replied = msg.msg?.contextInfo ? msg.msg.contextInfo.quotedMessage : false
  msg.mentions = msg.msg?.contextInfo ? msg.msg.contextInfo.mentionedJid : []
+ msg.command = (msg.text.includes(' ') ? msg.text.split(' ')[0] : msg.text).replace(msg.text.charAt(0), '')
  if (msg.replied) {
   msg.replied.id = msg.msg.contextInfo.stanzaId || false
   msg.replied.chat = msg.msg.contextInfo.remoteJid || msg.chat
