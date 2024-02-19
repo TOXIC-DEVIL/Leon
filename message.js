@@ -37,6 +37,7 @@ if (msg.message) {
 }
 msg.isOwner = msg.sender === msg.me
 msg.reply = async (message, options, jid = msg.chat) => {
+ await new Promise(resolve => setTimeout(resolve, 1000));
  if (message.hasOwnProperty('text')) {
   return await sock.sendMessage(jid, { text: message.text, mentions: (await msg.getMentions(message.text)), ...message}, { quoted: msg, ...options});
  } else if (message.hasOwnProperty('image')) {
