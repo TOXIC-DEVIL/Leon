@@ -122,8 +122,7 @@ async function Connect() {
             if (msg.chat === 'status@broadcast') return;
 
             try {
-             let cmd = (msg.text.includes(' ') ? msg.text.split(' ')[0] : msg.text).replace(charAt(0), '');
-             if (allCommands(cmd) || msg.isPrivate) {
+             if (allCommands(msg.command) || msg.isPrivate) {
               let user = await Users.findAll({ where: { id: msg.isPrivate ? msg.chat : msg.sender } });
               if (user.length < 1) {
                await Users.create({ name: msg.pushName, id: msg.isPrivate ? msg.chat : msg.sender });
@@ -168,7 +167,7 @@ async function Connect() {
              } catch (e) {
                console.log(e);
                await sock.sendMessage(sock.user.id, {
-                 text: '*ERROR OCCURRED*\n\n_An error occurred while using ' + (msg.text.includes(' ') ? msg.text.split(' ')[0] : msg.text).replace(msg.text.charAt(0), '') + ' command._\n_Please open an issue at https://github.com/TOXIC-DEVIL/Leon/issues for an instant support._\n\n*Error:*\n*' + e.message + '*'
+                 text: '*ERROR OCCURRED*\n\n_An error occurred while using ' + msg.command + ' command._\n_Please open an issue at https://github.com/TOXIC-DEVIL/Leon/issues for an instant support._\n\n*Error:*\n*' + e.message + '*'
                });
              }
            });
