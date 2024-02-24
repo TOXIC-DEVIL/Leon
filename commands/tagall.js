@@ -4,7 +4,7 @@ module.exports = {
   private: false,
   func: async (sock, msg, text) => {
     if (!msg.isGroup) return await msg.reply({ text: '*This command can only be used in groups!*' });
-    if (msg.sender !== msg.me && !msg.isAdmin(msg.sender)) return await msg.reply({ text: '*You are not an admin!*' });
+    if (msg.sender !== msg.me && (!(await msg.isAdmin(msg.sender)))) return await msg.reply({ text: '*You are not an admin!*' });
     let group = await sock.groupMetadata(msg.chat);
     let mentions = group.participants.map((user) => user.id);
     if (!text && !msg.replied.text) {
