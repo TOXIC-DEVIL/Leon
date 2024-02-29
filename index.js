@@ -157,9 +157,7 @@ async function Connect() {
               if ((process.env.MODE === 'private' && (msg.fromMe || admins.includes(msg.sender))) ||
                 (process.env.MODE === 'public' && (!command.private || (msg.fromMe || admins.includes(msg.sender))))) {
                  let prefix = process.env?.PREFIX || '/';
-                 let text = (msg.text.match(
-                  new RegExp(`^${prefix}${command.command}\\s*(.*)`, 'm')
-                 )?.[1]?.trim());
+                 let text = msg.text?.replace(prefix + command.command, '');
                  if (msg.text.startsWith(prefix + command.command)) {
                   await command.func(sock, msg, text);
                  }
