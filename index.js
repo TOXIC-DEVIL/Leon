@@ -57,6 +57,23 @@ async function Connect() {
             browser: ['Leon', 'Chrome', '1.0.0'],
             auth: state,
             version: version,
+            patchMessageBeforeSending: (message) => {
+              let requiresPatch = !!(message.buttonsMessage || message.listMessage || message.templateMessage)
+              if (requiresPatch) {
+                message = {
+                  viewOnceMessage: {
+                    message: {
+                      messageContextInfo: {
+                       deviceListMetadata: {},
+                       deviceListMetadataVersion: 2,
+                      },
+                      ...message,
+                    },
+                  },
+                }
+              }
+              return message
+            },
             getMessage: async (key) => {
               let jid = jidNormalizedUser(key.remoteJid)
               let msg = await store.loadMessage(jid, key.id)
