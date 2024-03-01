@@ -2,7 +2,7 @@ const { parseJson } = require('../helpers/utils');
 
 module.exports = {
   command: 'threads',
-  info: 'Download image or video fron threads.',
+  info: 'Download image or video from threads.',
   private: false,
   func: async (sock, msg, text) => {
     if (!text) return await msg.reply({ text: '*Please enter any threads image or video url!*' });
