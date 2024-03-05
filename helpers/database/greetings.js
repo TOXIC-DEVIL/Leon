@@ -12,7 +12,7 @@ const Greetings = database.define('Greetings', {
     allowNull: false,
   },
   text: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(4000),
     allowNull: false,
   },
 });
