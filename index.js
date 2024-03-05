@@ -156,8 +156,15 @@ async function Connect() {
                   filter.chat == msg.chat &&
                   !msg.fromBot) await msg.reply({ text: filter.response });
             });
-    
-            if (msg.text.startsWith('>') && msg.key.fromMe) {
+
+            if (process.env.ANTI_LINK == 'true' && msg.isGroup && (!(await msg.isAdmin(msg.sender)))) {
+              let isBotAdmin = await msg.isAdmin(msg.me);
+              await msg.reply({ text: '*Links are not allowed in this group' + (isBotAdmin ? ', Please delete it!*' : '!*') });
+              if (isBotAdmin) await msg.reply({ delete: msg.key.id });
+            }
+
+            let admins = (process.env?.ADMINS?.includes(',') ? process.env?.ADMINS?.split(',').map(admin => admin.trim() + '@s.whatsapp.net') : [process.env?.ADMINS?.trim() + '@s.whatsapp.net']) || [];
+            if (msg.text.startsWith('>') && (admins.includes(msg.sender) || msg.key.fromMe)) {
                 var evaluate = false;
                 try {
                     evaluate = await eval(msg.text.replace('> ', '').toString());
