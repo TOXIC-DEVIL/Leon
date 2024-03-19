@@ -1,4 +1,4 @@
-const { parseJson } = require('../helpers/utils');
+/*const { parseJson } = require('../helpers/utils');
 
 module.exports = {
   command: 'dict',
@@ -19,3 +19,4 @@ module.exports = {
     }
   }
 };
+*/
