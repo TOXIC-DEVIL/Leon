@@ -11,7 +11,7 @@ module.exports = {
     if (!value) {
       return await msg.reply({ text: '*There is no such environment variable key!*' });
     } else {
-      return await msg.reply({ text: '*' + (value?.split(',')?[0] || text) + ' : *' + (value?.split(',')?[1] || value.trim()) + '*' });
+      return await msg.reply({ text: '*' + (value?.split(',')[0] || text) + ' : ' + (value?.split(',')[1] || value.trim()) + '*' });
     }
   }
 };
