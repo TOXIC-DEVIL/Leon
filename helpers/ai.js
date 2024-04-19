@@ -1,7 +1,7 @@
 const { RsnChat } = require('rsnchat');
 let { gpt, gemini, dalle } = new RsnChat('rsnai_hMCzXCerezIAEr91cdCfT2jt');
 
-function ai(type, prompt) {
+async function ai(type, prompt) {
   try {
     type = type.toLowerCase();
     let result;
