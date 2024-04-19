@@ -6,14 +6,15 @@ async function ai(type, prompt) {
     type = type.toLowerCase();
     let result;
     if (type == 'chatgpt') {
-      result = await gpt(prompt);
+      result = await gpt(prompt).message;
     } else if (type == 'gemini') {
-      result = await gemini(prompt);
+      result = await gemini(prompt).message;
     } else if (type == 'dalle') {
-      result = await dalle(prompt);
+      result = await dalle(prompt).url;
     }
-    return result?.message || result?.url || false;
-  } catch {
+    return result || false;
+  } catch (e) {
+    console.error(e);
     return false;
   }
 };
