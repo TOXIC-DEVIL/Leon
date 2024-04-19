@@ -1,21 +1,14 @@
 const { RsnChat } = require('rsnchat');
 let { gpt, gemini, dalle } = new RsnChat('rsnai_hMCzXCerezIAEr91cdCfT2jt');
 
-async function ai(type, prompt) {
-  try {
-    type = type.toLowerCase();
-    let result;
-    if (type == 'chatgpt') {
-      result = await gpt(prompt).message;
-    } else if (type == 'gemini') {
-      result = await gemini(prompt).message;
-    } else if (type == 'dalle') {
-      result = await dalle(prompt).url;
-    }
-    return result || false;
-  } catch (e) {
-    console.error(e);
-    return false;
+function ai(type, prompt) {
+  type = type.toLowerCase();
+  if (type == 'chatgpt') {
+    return gpt(prompt)?.message || false;
+  } else if (type == 'gemini') {
+    return gemini(prompt)?.message || false;
+  } else if (type == 'dalle') {
+    return dalle(prompt)?.url || false;
   }
 };
 
