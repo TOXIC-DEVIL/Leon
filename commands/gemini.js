@@ -6,8 +6,8 @@ module.exports = {
   info: 'Gemini is a multimodal AI (LLM) developed by Google.',
   private: false,
   func: async (sock, msg, text) => {
-    text = !text ? 'Hello' : text;
-    let result = ai.gemini(text).then((response) => response?.message?.trim());
-    return await msg.reply({ text: result });
+    return await ai.gemini(text || 'Hello').then(async (response) => {
+      await msg.reply({ text: response?.message?.trim() });
+    });
   }
 };
