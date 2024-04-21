@@ -7,7 +7,7 @@ module.exports = {
   private: false,
   func: async (sock, msg, text) => {
     text = !text ? 'Hello' : text;
-    let result = ai.gemini(text).then((response) => response.message?.trim());
+    let result = ai.gemini(text).then((response) => response?.message?.trim());
     return await msg.reply({ text: result });
   }
 };
