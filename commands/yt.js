@@ -13,7 +13,7 @@ module.exports = {
       image: {
         url: result[0].profile_pic
       },
-      caption: '_Name_ : *' + result[0].title + '*\n_Handler_ : *' + result[0].handler + '*\n_Subscribers_ : *' + result[0].subscribers + '( ' + result[0].subscribers_text + ' )*\n_URL_ : ' + result[0].url });
+      caption: '_Name_ : *' + result[0].title + '*\n_Handler_ : *' + result[0].handler + '*\n_Subscribers_ : *' + result[0].subscribers + '( ' + result[0].subscribers_text + ' )*\n_URL_ : ' + result[0].url
     });
    } catch {
     return await msg.reply({ text: '*Unable to find a channel in this name!*' });
