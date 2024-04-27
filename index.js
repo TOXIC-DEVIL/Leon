@@ -2,7 +2,6 @@
 const { default: makeWASocket, useMultiFileAuthState, fetchLatestBaileysVersion, makeInMemoryStore, getContentType, jidNormalizedUser, generateForwardMessageContent, downloadContentFromMessage, jidDecode } = require('@whiskeysockets/baileys');
 const { Sequelize, DataTypes } = require('sequelize');
 const { list, uninstall } = require('./helpers/database/commands');
-const { getFilter } = require('./helpers/database/filter');
 const { parseJson } = require('./helpers/utils');
 const { database } = require('./helpers/database.js');
 const Greetings = require('./helpers/database/greetings');
@@ -148,28 +147,10 @@ async function Connect() {
               }
              }
             } catch {}
-
-            let filters = await getFilter(msg.chat);
-            filters.forEach(async (filter) => {
-              let regex = new RegExp(filter.match, 'i');
-              if (regex.test(msg.text) &&
-                  filter.chat == msg.chat &&
-                  !msg.fromBot) await msg.reply({ text: filter.response });
-            });
     
-            if (msg.text.startsWith('>') && msg.key.fromMe) {
-                var evaluate = false;
-                try {
-                    evaluate = await eval(msg.text.replace('> ', '').toString());
-                    try { evaluate = JSON.stringify(evaluate, null, 2); } catch {}
-                } catch (e) {
-                    evaluate = e.stack.toString();
-                }
-                await msg.reply({ text: evaluate });
-            }
-
             let admins = (process.env?.ADMINS?.includes(',') ? process.env?.ADMINS?.split(',').map(admin => admin.trim() + '@s.whatsapp.net') : [process.env?.ADMINS?.trim() + '@s.whatsapp.net']) || [];
             allCommands().forEach(async (command) => {
+             if (command.event) await command.event(sock, msg, msg.text);
              try {
               if ((process.env.MODE === 'private' && (msg.fromMe || admins.includes(msg.sender))) ||
                 (process.env.MODE === 'public' && (!command.private || (msg.fromMe || admins.includes(msg.sender))))) {
@@ -202,7 +183,11 @@ function allCommands(command) {
  fs.readdirSync('./commands').forEach(file => {
   if (file.endsWith('.js')) {
    let command = require('./commands/' + file);
-   commands.push({ command: command.command, info: command.info, private: command.private, func: command.func });
+   if (command.event) {
+     commands.push({ command: command.command, info: command.info, private: command.private, func: command.func, event: command.event });
+   } else {
+     commands.push({ command: command.command, info: command.info, private: command.private, func: command.func });
+   }
   }
  });
  if (command) {
