@@ -1,38 +1,25 @@
 const axios = require('axios');
-const cheerio = require('cheerio');
 
 async function instagram(url) {
-  return new Promise(async (resolve) => {
-   if (!url.match(/\/(reel|p|stories)\/[a-zA-Z0-9_-]+/i)) return resolve({ status: false });
-   try {
-    let json = await (await axios.post("https://saveig.app/api/ajaxSearch", require('querystring').stringify({ q: url, t: "media", lang: "en" }), {
-     headers: {
-     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-     'Accept-Encoding': 'gzip, deflate, br',
-     'Origin': 'https://saveig.app/en',
-     'Referer': 'https://saveig.app/en',
-     'Referrer-Policy': 'strict-origin-when-cross-origin',
-     'User-Agent': 'PostmanRuntime/7.31.1'
-     }
-    })).data
-    let $ = cheerio.load(json.data)
-    let data = []
-    $('div[class="download-items__btn"]').each((i, e) => data.push({ type: $(e).find('a').attr('href').match('.jpg') ? 'image' : 'video', url: $(e).find('a').attr('href') }))
-    if (!data.length) return resolve({
-      status: false
-    }) 
-    resolve({
-      status: true,
-      data
+  try {
+    let response = await axios.get(`https://api.sssgram.com/st-tik/ins/dl?url=${url}&timestamp=${Date.now()}`, {
+      headers: { 
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0',
+        'Accept': 'application/json, text/plain, */*',
+        'Accept-Language': 'pt-BR,pt;q=0.8,en-US;q=0.5,en;q=0.3',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Origin': 'https://www.sssgram.com',
+        'Connection': 'keep-alive',
+        'Referer': 'https://www.sssgram.com/',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-site'
+      }
     })
-} catch (e) {
-    console.log(e)
-    return resolve({
-     status: false,
-     msg: e.message
-    })
-   }
- })
+    return response.data?.result.insBos.map((media) => media.url) || false;
+  } catch (e) {
+    return false;
+  }
 };
 
 module.exports = { instagram };
