@@ -11,8 +11,8 @@ module.exports = {
     let webp = await toSticker(
       msg.replied.image ? 'image' : 'video',
       media, {
-        packname: text !== '' && text.includes('/') ? text.split('/')[0].trim() : '',
-        author: text !== '' && text.includes('/') ? text.split('/')[1].trim() : 'Leon'
+        packname: text?.split('/')[0]?.trim() || '',
+        author: text?.split('/')[1]?.trim() || 'Leon'
       }
     );
     return await msg.reply({ sticker: webp });

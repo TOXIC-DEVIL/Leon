@@ -1,4 +1,4 @@
-const rbg = require('remove.bg');
+const rbg = require('remove.bg').removeBackgroundFromImageFile;
 const fs = require('fs');
 
 module.exports = {

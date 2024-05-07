@@ -6,7 +6,10 @@ module.exports = {
   private: false,
   func: async (sock, msg, text) => {
     if (!msg.isGroup) return await msg.reply({ text: '*This command can only be used in group!*' });
+    let group = await sock.groupMetadata(msg.chat);
+    if (!group.joinApprovalMode) return await msg.reply({ text: '*Approval mode is not enabled in this group!*' });
     if (!(await msg.isAdmin(msg.me))) return await msg.reply({ text: '*I am not an admin of this group!*' });
+    if (!(await msg.isAdmin(msg.sender))) return await msg.reply({ text: '*You are not an admin of this group!*' });
     let list = await sock.groupRequestParticipantsList(msg.chat);
     if (list.length < 1) return await msg.reply({ text: '*There is no join requests!*' });
     let listText = '*Group join requests:*\n';

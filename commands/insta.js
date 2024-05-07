@@ -5,6 +5,7 @@ module.exports = {
   info: 'Fetch instagram user information from username.',
   private: false,
   func: async (sock, msg, text) => {
+    if (msg.text.split(' ')[0].includes('install')) return;
     if (!text) return await msg.reply({ text: '*Please enter any instagram username!*' });
     let res;
     try {

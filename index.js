@@ -2,7 +2,6 @@
 const { default: makeWASocket, useMultiFileAuthState, fetchLatestBaileysVersion, makeInMemoryStore, getContentType, jidNormalizedUser, generateForwardMessageContent, downloadContentFromMessage, jidDecode } = require('@whiskeysockets/baileys');
 const { Sequelize, DataTypes } = require('sequelize');
 const { list, uninstall } = require('./helpers/database/commands');
-const { getFilter } = require('./helpers/database/filter');
 const { parseJson } = require('./helpers/utils');
 const { database } = require('./helpers/database.js');
 const Greetings = require('./helpers/database/greetings');
@@ -57,6 +56,23 @@ async function Connect() {
             browser: ['Leon', 'Chrome', '1.0.0'],
             auth: state,
             version: version,
+            patchMessageBeforeSending: (message) => {
+              let requiresPatch = !!(message.buttonsMessage || message.listMessage || message.templateMessage)
+              if (requiresPatch) {
+                message = {
+                  viewOnceMessage: {
+                    message: {
+                      messageContextInfo: {
+                       deviceListMetadata: {},
+                       deviceListMetadataVersion: 2,
+                      },
+                      ...message,
+                    },
+                  },
+                }
+              }
+              return message
+            },
             getMessage: async (key) => {
               let jid = jidNormalizedUser(key.remoteJid)
               let msg = await store.loadMessage(jid, key.id)
@@ -122,42 +138,24 @@ async function Connect() {
             if (msg.chat === 'status@broadcast') return;
 
             try {
-             let user = await Users.findAll({ where: { id: msg.isPrivate ? msg.chat : msg.sender } });
-             if (user.length < 1) {
-              await Users.create({ name: msg.pushName, id: msg.isPrivate ? msg.chat : msg.sender });
-             } else {
-              await Users[0]?.update({ name: msg.pushName });
+             if (allCommands(msg.command) || msg.isPrivate) {
+              let user = await Users.findAll({ where: { id: msg.isPrivate ? msg.chat : msg.sender } });
+              if (user.length < 1) {
+               await Users.create({ name: msg.pushName, id: msg.isPrivate ? msg.chat : msg.sender });
+              } else {
+               await Users[0]?.update({ name: msg.pushName });
+              }
              }
             } catch {}
-
-            let filters = await getFilter(msg.chat);
-            filters.forEach(async (filter) => {
-              let regex = new RegExp(filter.match, 'i');
-              if (regex.test(msg.text) &&
-                  filter.chat == msg.chat &&
-                  !msg.fromBot) await msg.reply({ text: filter.response });
-            });
     
-            if (msg.text.startsWith('>') && msg.key.fromMe) {
-                var evaluate = false;
-                try {
-                    evaluate = await eval(msg.text.replace('> ', '').toString());
-                    try { evaluate = JSON.stringify(evaluate, null, 2); } catch {}
-                } catch (e) {
-                    evaluate = e.stack.toString();
-                }
-                await msg.reply({ text: evaluate });
-            }
-
             let admins = (process.env?.ADMINS?.includes(',') ? process.env?.ADMINS?.split(',').map(admin => admin.trim() + '@s.whatsapp.net') : [process.env?.ADMINS?.trim() + '@s.whatsapp.net']) || [];
             allCommands().forEach(async (command) => {
+             if (command.event) await command.event(sock, msg, msg.text);
              try {
               if ((process.env.MODE === 'private' && (msg.fromMe || admins.includes(msg.sender))) ||
                 (process.env.MODE === 'public' && (!command.private || (msg.fromMe || admins.includes(msg.sender))))) {
                  let prefix = process.env?.PREFIX || '/';
-                 let text = (msg.text.match(
-                  new RegExp(`^${prefix}${command.command}\\s*(.*)`)
-                 )?.[1]?.trim());
+                 let text = msg.text?.replace(prefix + command.command, '').trim();
                  if (msg.text.startsWith(prefix + command.command)) {
                   await command.func(sock, msg, text);
                  }
@@ -165,7 +163,7 @@ async function Connect() {
              } catch (e) {
                console.log(e);
                await sock.sendMessage(sock.user.id, {
-                 text: '*ERROR OCCURRED*\n\n_An error occurred while using ' + (msg.text.includes(' ') ? msg.text.split(' ')[0] : msg.text).replace(msg.text.charAt(0), '') + ' command._\n_Please open an issue at https://github.com/TOXIC-DEVIL/Leon/issues for an instant support._\n\n*Error:*\n*' + e.message + '*'
+                 text: '*ERROR OCCURRED*\n\n_An error occurred while using ' + msg.command + ' command._\n_Please open an issue at https://github.com/TOXIC-DEVIL/Leon/issues for an instant support._\n\n*Error:*\n*' + e.message + '*'
                });
              }
            });
@@ -180,15 +178,23 @@ async function Connect() {
     }
 }
 
-function allCommands() {
+function allCommands(command) {
  let commands = [];
  fs.readdirSync('./commands').forEach(file => {
   if (file.endsWith('.js')) {
    let command = require('./commands/' + file);
-   commands.push({ command: command.command, info: command.info, private: command.private, func: command.func });
+   if (command.event) {
+     commands.push({ command: command.command, info: command.info, private: command.private, func: command.func, event: command.event });
+   } else {
+     commands.push({ command: command.command, info: command.info, private: command.private, func: command.func });
+   }
   }
  });
- return commands;
+ if (command) {
+  return commands.includes(command);
+ } else {
+  return commands;
+ }
 }
 
 Connect();
