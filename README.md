@@ -11,6 +11,7 @@
 
 ### Installation
 
+> [!TIP]
 > There are many steps involved in installing Leon. If you are not aware about it, Please watch the video by [clicking here](https://youtu.be/ogIegusIMLc)
 
 #### AUTH
