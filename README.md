@@ -1,12 +1,12 @@
 ## Leon
 <p align="center">
-  <a href="https://whatsapp.com/channel/0029VaEOj2v1CYoTrXmyaG1s" target="_blank">
+  <a href="https://telegram.me/leon_wabot" target="_blank">
   <img src="https://i.ibb.co/wNCbpry/20240101-130819.jpg" alt="Leon" width="200" height="200">
   </a>
   <br>
   <strong>L E O N</strong><br>
   <strong>WhatsApp Bot</strong><br><br>
-  <strong>Click <a href="https://whatsapp.com/channel/0029VaEOj2v1CYoTrXmyaG1s" target="_blank">here</a> or in the logo to join our WhatsApp Channel for updates and announcements of Leon.</strong>
+  <strong>Click <a href="https://telegram.me/leon_wabot" target="_blank">here</a> or in the logo to join our Telegram Channel for updates and announcements of Leon.</strong>
 </p>
 
 ### Installation
