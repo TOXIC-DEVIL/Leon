@@ -18,7 +18,7 @@ module.exports = {
     let vim = await msg.reply({ text: '*Downloading video...*' });
     let file = video + '.mp4';
     let vid = ytdl(video, {
-      filter: format => format.container === 'mp4' && ['1080p', '720p', '480p', '360p', '240p', '144p']
+      filter: format => format.container === 'mp4' && format.hasVideo && format.hasAudio && ['1080p', '720p', '480p', '360p', '240p', '144p']
         .map(() => true)
     })
     vid.pipe(fs.createWriteStream(file));
