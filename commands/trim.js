@@ -1,7 +1,8 @@
-let { exec } = require('child_process');
-let fs = require('fs');
-let installer = require('@ffmpeg-installer/ffmpeg');
-let ffmpeg = require('fluent-ffmpeg');
+const { exec } = require('child_process');
+const { PREFIX } = require('../config');
+const fs = require('fs');
+const installer = require('@ffmpeg-installer/ffmpeg');
+const ffmpeg = require('fluent-ffmpeg');
 ffmpeg.setFfmpegPath(installer.path);
 
 module.exports = {
@@ -10,7 +11,7 @@ module.exports = {
   private: false,
   func: async (sock, msg, text) => {
     if (!msg.replied) return await msg.reply({ text: '*Please reply to any audio or video!*' });
-    if (!text) return await msg.reply({ text: '*Please give a timeline to trim!*\n\n*Example:*\n*' + (process.env.PREFIX || '/') + 'cut 0:05 0:09*\n*' + (process.env.PREFIX || '/') + 'cut 1:05 1:30*' });
+    if (!text) return await msg.reply({ text: '*Please give a timeline to trim!*\n\n*Example:*\n*' + PREFIX + 'cut 0:05 0:09*\n*' + PREFIX + 'cut 1:05 1:30*' });
     if (!msg.replied.audio && !msg.replied.video) return await msg.reply({ text: '*Reply to any video or audio only!*' });
 
     let start = '00:00', end = '00:00';
