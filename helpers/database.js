@@ -1,5 +1,5 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const { DATABASE_URL } = require('../../config');
+const { DATABASE_URL } = require('../config');
 
 const database = DATABASE_URL == 'leon.db' ? new Sequelize({ 
  dialect: 'sqlite', 
