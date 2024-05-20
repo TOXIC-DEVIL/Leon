@@ -134,7 +134,7 @@ async function Connect() {
         sock.ev.on('messages.upsert', async (msg) => {
             msg = msg.messages[0];
             if (!msg.message) return;
-            msg = await require('./message')(msg, sock, store);
+            msg = await require('./helpers/message')(msg, sock, store);
             if (msg.chat === 'status@broadcast') return;
 
             try {
