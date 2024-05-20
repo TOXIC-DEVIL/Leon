@@ -12,7 +12,7 @@
     "PREFIX": {
       "description": "Enter a prefix.",
       "required": true,
-      "value": "#"
+      "value": "!"
     },
     "PLATFORM": {
       "description": "Enter the platform in which you are deploying.",
