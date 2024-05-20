@@ -11,7 +11,7 @@ module.exports = {
       if (!result) return await msg.reply({ text: '*Invalid url, Please enter a valid instagram post/reels url!*' });
       for (let data of result.data) {
         return await msg.reply({ 
-          [(!data.includes('mp4') ? 'image' : 'video')]: {
+          [(data.match(/jpg|png|jpeg/) ? 'image' : 'video')]: {
             url: data
           }
         });
