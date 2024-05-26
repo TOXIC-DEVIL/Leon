@@ -29,5 +29,8 @@
 )<br>
 **Please get DATABASE_URL from [here](https://www.cockroachlabs.com/) if you are deploying to koyeb.**
 
+## License
+This project is licensed under [GPL-3.0 License](https://github.com/TOXIC-DEVIL/Leon/blob/master/LICENSE)
+
 ### Thanks To:
 - [Baileys](https://github.com/WhiskeySockets/Baileys)
