@@ -14,8 +14,8 @@ module.exports = {
       let definition = data[0].meanings[0].definitions[0].definition;
       let example = (data[0].meanings[0].definitions.find(obj => 'example' in obj) || {})['example'];
       return await msg.reply({ text: `_Word_ : *${word}*\n_Parts of speech_ : *${partsOfSpeech}*\n_Definition_ :\n*${definition}*${example == undefined ? `` : `\n_Example_ : *${example}*`}`.trim() });
-    }).catch(async (e) => {
-      return await msg.reply({ text: '*Unable to find definition for ' + text + '!*\n' + e.stack });
+    }).catch(async () => {
+      return await msg.reply({ text: '*Unable to find definition for ' + text + '!*' });
     });
   }
 };

@@ -9,10 +9,10 @@ module.exports = {
     await instagram(text)
      .then(async (result) => {
       if (!result) return await msg.reply({ text: '*Invalid url, Please enter a valid instagram post/reels url!*' });
-      for (let media of result) {
+      for (let data of result.data) {
         return await msg.reply({ 
-          [(!media.includes('mp4') ? 'image' : 'video')]: {
-            url: media
+          [(data.match(/jpg|png|jpeg/) ? 'image' : 'video')]: {
+            url: data
           }
         });
       }

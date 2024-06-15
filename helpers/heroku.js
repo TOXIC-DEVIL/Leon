@@ -1,13 +1,14 @@
 const HerokuClient = require('heroku-client');
+const { HEROKU_API_TOKEN, HEROKU_APP_NAME } = require('../config');
 const fs = require('fs');
 
 async function Heroku(action, param) {
   let heroku = new HerokuClient({
-   token: process.env?.HEROKU_API_KEY
+   token: HEROKU_API_TOKEN
   })
   if (action == 'shutdown') {
-   return await heroku.get(`/apps/${process.env.HEROKU_APP_NAME}/formation`).then(async (formation) => {
-    await heroku.patch(`/apps/${process.env.HEROKU_APP_NAME}/formation/${formation[0].id}`, {
+   return await heroku.get(`/apps/${HEROKU_APP_NAME}/formation`).then(async (formation) => {
+    await heroku.patch(`/apps/${HEROKU_APP_NAME}/formation/${formation[0].id}`, {
       body: {
        quantity: 0
       }
@@ -17,13 +18,13 @@ async function Heroku(action, param) {
       return false;
     });
   } else if (action == 'restart') {
-   return await heroku.delete(`/apps/${process.env.HEROKU_APP_NAME}/dynos`)
+   return await heroku.delete(`/apps/${HEROKU_APP_NAME}/dynos`)
    .catch(async (e) => { 
     console.log(e);
     return false;
    });
   } else if (action == 'setenv') {
-   return await heroku.patch(`/apps/${process.env.HEROKU_APP_NAME}/config-vars`, { 
+   return await heroku.patch(`/apps/${HEROKU_APP_NAME}/config-vars`, { 
     body: { 
       [param[0]]: param[1]
     } 
@@ -32,7 +33,7 @@ async function Heroku(action, param) {
     return false;
    });
   } else if (action == 'delenv') {
-   return await heroku.get(`/apps/${process.env.HEROKU_APP_NAME}/config-vars`)
+   return await heroku.get(`/apps/${HEROKU_APP_NAME}/config-vars`)
     .then(async (envs) => {
       for (env in envs) {
        if (param.trim() == env) {
@@ -50,7 +51,7 @@ async function Heroku(action, param) {
      return false;
     });
   } else if (action == 'getenv') {
-   return await heroku.get(`/apps/${process.env.HEROKU_APP_NAME}/config-vars`)
+   return await heroku.get(`/apps/${HEROKU_APP_NAME}/config-vars`)
     .then(async (envs) => {
       for (env in envs) {
        if (param.trim() == env) return [env, envs[env]];

@@ -1,6 +1,11 @@
 const { Sequelize, DataTypes } = require('sequelize');
+const { DATABASE_URL } = require('../config');
 
-const database = new Sequelize(process.env.DATABASE_URL, {
+const database = DATABASE_URL == 'leon.db' ? new Sequelize({ 
+ dialect: 'sqlite', 
+ storage: 'leon.db',
+ logging: false
+}) : new Sequelize(DATABASE_URL, {
  dialectOptions: {
   ssl: {
    require: true,
