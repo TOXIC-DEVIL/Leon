@@ -11,9 +11,6 @@ const pino = require('pino');
 const colors = require('colors');
 const qrcode = require('qrcode-terminal');
 const fs = require('fs');
-require('http')
- .createServer(async (req, res) => {})
- .listen(process.env?.PORT || 8080, () => true);
 
 const Users = database.define('Users', {
     name: {
@@ -36,10 +33,7 @@ async function Connect() {
 
         if (AUTH_ID !== false && !fs.existsSync('./session/creds.json')) {
          try {
-          let response = await axios.post('https://leonwabot.vercel.app/auth', {
-           code: AUTH_ID
-          })
-          let auth = Buffer.from(response.data.auth, 'base64').toString();
+          let auth = Buffer.from(AUTH_ID, 'base64').toString();
           fs.writeFileSync(__dirname + '/session/creds.json', auth);
           console.log('[ - ] Creating session file...');
          } catch (e) {
