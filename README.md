@@ -12,12 +12,16 @@
 ### Installation
 
 > [!TIP]
-> There are many steps involved in installing Leon. If you are not aware about it, Please watch the video by [clicking here](https://youtu.be/ogIegusIMLc)
+> There are many steps involved in installing Leon. If you are not aware about it, Please watch the video by [clicking here](https://youtu.be/kNXYOVgPGys)
 
 #### AUTH
-<a href="https://leonwabot.onrender.com/qr" target="_blank">
-  <img src="https://img.shields.io/badge/Authenticate_with_WhatsApp-25D366" alt="Authenticate With WhatsApp" width="170" height="34">
-</a>
+**String Session:**
+```bash
+> git clone https://github.com/TOXIC-DEVIL/Leon
+> cd Leon
+> npm install
+> node string_session.js
+```
 
 #### DEPLOY
 ##### HEROKU
