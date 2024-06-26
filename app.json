@@ -5,8 +5,8 @@
   "repository": "https://github.com/TOXIC-DEVIL/Leon",
   "stack": "container",
   "env": {
-    "AUTH_ID": {
-      "description": "Enter your authentication ID.",
+    "SESSION": {
+      "description": "Enter your session.",
       "required": true
     },
     "PREFIX": {
