@@ -19,6 +19,7 @@
 ```bash
 > git clone https://github.com/TOXIC-DEVIL/Leon
 > cd Leon
+> npm install
 > node string_session.js
 ```
 
