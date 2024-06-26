@@ -4,7 +4,7 @@ const { Sequelize, DataTypes } = require('sequelize');
 const { list, uninstall } = require('./helpers/database/commands');
 const { parseJson } = require('./helpers/utils');
 const { database } = require('./helpers/database.js');
-const { AUTH_ID, ADMINS, MODE, PREFIX } = require('./config');
+const { SESSION, ADMINS, MODE, PREFIX } = require('./config');
 const Greetings = require('./helpers/database/greetings');
 const axios = require('axios');
 const pino = require('pino');
@@ -31,9 +31,9 @@ async function Connect() {
             logger: pino().child({ level: 'silent', stream: 'store' })
         });
 
-        if (AUTH_ID !== false && !fs.existsSync('./session/creds.json')) {
+        if (SESSION !== false && !fs.existsSync('./session/creds.json')) {
          try {
-          let auth = Buffer.from(AUTH_ID, 'base64').toString();
+          let auth = Buffer.from(SESSION, 'base64').toString();
           fs.writeFileSync(__dirname + '/session/creds.json', auth);
           console.log('[ - ] Creating session file...');
          } catch (e) {
