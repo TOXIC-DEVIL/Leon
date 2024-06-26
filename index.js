@@ -38,7 +38,7 @@ async function Connect() {
           console.log('[ - ] Creating session file...');
          } catch (e) {
           console.error(e)
-          throw new Error('[ ! ] Please provide a valid AUTH_ID');
+          throw new Error('[ ! ] Please provide a valid SESSION');
          }
         }
 
