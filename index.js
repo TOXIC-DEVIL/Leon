@@ -4,16 +4,13 @@ const { Sequelize, DataTypes } = require('sequelize');
 const { list, uninstall } = require('./helpers/database/commands');
 const { parseJson } = require('./helpers/utils');
 const { database } = require('./helpers/database.js');
-const { AUTH_ID, ADMINS, MODE, PREFIX } = require('./config');
+const { SESSION, ADMINS, MODE, PREFIX } = require('./config');
 const Greetings = require('./helpers/database/greetings');
 const axios = require('axios');
 const pino = require('pino');
 const colors = require('colors');
 const qrcode = require('qrcode-terminal');
 const fs = require('fs');
-require('http')
- .createServer(async (req, res) => {})
- .listen(process.env?.PORT || 8080, () => true);
 
 const Users = database.define('Users', {
     name: {
@@ -34,17 +31,14 @@ async function Connect() {
             logger: pino().child({ level: 'silent', stream: 'store' })
         });
 
-        if (AUTH_ID !== false && !fs.existsSync('./session/creds.json')) {
+        if (SESSION !== false && !fs.existsSync('./session/creds.json')) {
          try {
-          let response = await axios.post('https://leonwabot.vercel.app/auth', {
-           code: AUTH_ID
-          })
-          let auth = Buffer.from(response.data.auth, 'base64').toString();
+          let auth = Buffer.from(SESSION, 'base64').toString();
           fs.writeFileSync(__dirname + '/session/creds.json', auth);
           console.log('[ - ] Creating session file...');
          } catch (e) {
           console.error(e)
-          throw new Error('[ ! ] Please provide a valid AUTH_ID');
+          throw new Error('[ ! ] Please provide a valid SESSION');
          }
         }
 

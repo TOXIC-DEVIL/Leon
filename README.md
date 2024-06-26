@@ -12,12 +12,13 @@
 ### Installation
 
 > [!TIP]
-> There are many steps involved in installing Leon. If you are not aware about it, Please watch the video by [clicking here](https://youtu.be/ogIegusIMLc)
+> There are many steps involved in installing Leon. If you are not aware about it, Please watch the video by [clicking here](https://youtu.be/kNXYOVgPGys)
 
 #### AUTH
-<a href="https://leonwabot.onrender.com/qr" target="_blank">
-  <img src="https://img.shields.io/badge/Authenticate_with_WhatsApp-25D366" alt="Authenticate With WhatsApp" width="170" height="34">
-</a>
+**String Session:**
+```bash
+// TODO 
+```
 
 #### DEPLOY
 ##### HEROKU
@@ -28,7 +29,7 @@
 ##### RAILWAY
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/1zs3t5)
 ##### KOYEB
-[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/apps/deploy?repository=github.com%2FTOXIC-DEVIL%2FLeon&type=git&branch=master&builder=dockerfile&name=leon&env[ADMINS]=&env[AUTH_ID]=&env[DATABASE_URL]=&env[PLATFORM]=koyeb&env[PREFIX]=!&env[MODE]=private&env[RBG_API_KEY]=
+[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/apps/deploy?repository=github.com%2FTOXIC-DEVIL%2FLeon&type=git&branch=master&builder=dockerfile&name=leon&env[ADMINS]=&env[SESSION]=&env[DATABASE_URL]=&env[PLATFORM]=koyeb&env[PREFIX]=!&env[MODE]=private&env[RBG_API_KEY]=
 )<br>
 
 ### Thanks To

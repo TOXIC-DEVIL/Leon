@@ -1,5 +1,5 @@
 module.exports = {
-  AUTH_ID: process.env['AUTH_ID'] || false,
+  SESSION: process.env['SESSION'] || false,
   ADMINS: process.env['ADMINS'] || false,
   DATABASE_URL: process.env['DATABASE_URL'] || 'leon.db',
   HEROKU_APP_NAME: process.env['HEROKU_APP_NAME'] || false,
