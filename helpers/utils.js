@@ -1,12 +1,29 @@
 const axios = require('axios');
 
-async function parseJson(url) {
+async function parseJson(opt) {
+  let options = {
+    method: 'GET',
+    url: '',
+    timeout: 5000,
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+      'Referer': 'https://github.com/TOXIC-DEVIL/Leon'
+    }
+  };
+  if (typeof opt !== 'object') opt = { url: opt };
+  options = {
+    ...options,
+    ...opt,
+    headers: {
+      ...options.headers,
+      ...opt.headers
+    }
+  };
   try {
-   let { data } = await axios.get(url);
+   let { data } = await axios.request(options);
    return data;
   } catch (e) {
-   console.log('An error occurred while fetching JSON:\n\n' + e.stack);
-   return false;
+   throw e;
   }
 }
 

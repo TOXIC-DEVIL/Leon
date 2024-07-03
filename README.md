@@ -17,7 +17,10 @@
 #### AUTH
 **String Session:**
 ```bash
-// TODO 
+> git clone https://github.com/TOXIC-DEVIL/Leon
+> cd Leon
+> npm install
+> node string_session.js
 ```
 
 #### DEPLOY

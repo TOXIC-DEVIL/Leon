@@ -1,5 +1,6 @@
 build:
-  docker:
-      worker: /Dockerfile
+  script:
+    - npm install
+
 run:
-   worker: npm start
+  worker: node index.js
