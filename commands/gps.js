@@ -8,7 +8,7 @@ module.exports = {
     if (!text) return await msg.reply({ text: '*Please enter a location!*\n*The location may not be accurately marked for all places.*\n*Example:*\n*- ' + config.PREFIX + 'gps Kerala, India*' });
     let failed = '*❌ Invalid location, please enter a valid location!*';
     try {
-      var loc = await parseJson(`https://nominatim.openstreetmap.org/search?addressdetails=1&q=${text.replace(' ', '+')}&format=json`);
+      var loc = await parseJson(`https://nominatim.openstreetmap.org/search?addressdetails=1&q=${text.replace(/ /g, '+')}&format=json`);
     } catch {
       return await msg.reply({ text: failed });
     }
