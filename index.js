@@ -48,7 +48,7 @@ async function Connect() {
             logger: pino({ level: 'silent' }),
             printQRInTerminal: false,
             markOnlineOnConnect: false,
-            browser: ['Leon', 'Chrome', '1.0.0'],
+            browser: ['Ubuntu', 'Chrome', '20.0.04'],
             auth: state,
             version: version,
             patchMessageBeforeSending: (message) => {
