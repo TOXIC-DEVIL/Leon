@@ -11,6 +11,11 @@ const pino = require('pino');
 const colors = require('colors');
 const qrcode = require('qrcode-terminal');
 const fs = require('fs');
+if (PLATFORM == 'koyeb') {
+  require('http')
+   .createServer(async (req, res) => {})
+   .listen(process.env?.PORT || 8080, () => true);
+}
 
 const Users = database.define('Users', {
     name: {
