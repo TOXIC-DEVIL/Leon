@@ -1,5 +1,5 @@
 const fs = require('fs');
-const ytdl = require('youtubedl-core');
+const ytdl = require('ytdl-core');
 
 module.exports = {
   command: 'video',
@@ -29,6 +29,10 @@ module.exports = {
        await msg.reply({ video: fs.readFileSync(file) });
        fs.unlinkSync(file);
       })
+    });
+    video.on('error', async (e) => {
+      await msg.reply({ text: '*Unable to download video from given url!*' });
+      throw e;
     });
   }
 };
