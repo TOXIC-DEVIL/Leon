@@ -1,5 +1,5 @@
 const { RsnChat } = require('rsnchat');
-let ai = new RsnChat('rsnai_1WZBGHRi6kA4cjyKNrZTuEVY');
+let ai = new RsnChat('rsnai_77URql4VkEeS0VenuWccfgk5');
 
 module.exports = {
   command: 'imagine',
