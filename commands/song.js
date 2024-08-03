@@ -31,8 +31,8 @@ module.exports = {
       await msg.reply({ audio: fs.readFileSync(file) });
     });
     audio.on('error', async (e) => {
+      await msg.reply({ text: '*Unable to download the song!*' });
       throw e;
-      return await msg.reply({ text: '*Unable to download the song!*' });
     });
   }
 };
