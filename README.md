@@ -24,11 +24,6 @@
 ```
 
 #### DEPLOY
-##### HEROKU
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/TOXIC-DEVIL/Leon)
-> [!IMPORTANT]
-> If you are unable to deploy Leon through above url, Please [fork this repository](https://github.com/TOXIC-DEVIL/Leon/fork) and head to https://heroku.com/deploy?template=https://github.com/{username}/Leon where {username} should be replaced with your GitHub username.
-
 ##### RAILWAY
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/1zs3t5)
 ##### KOYEB
