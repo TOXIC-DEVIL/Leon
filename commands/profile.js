@@ -17,14 +17,16 @@ module.exports = {
       } catch {
         pp = 'https://i.ibb.co/1n5F37j/avatar-contact.png';
       }
-      about = (await sock.fetchStatus(chat))?.status || 'Unknown';
+      try {
+        about = (await sock.fetchStatus(chat)).status;
+      } catch {}
       id = String(chat);
       number = id.split('@')[0]
       link = 'https://wa.me/' + number;
       return await msg.reply(
         { 
           image: { url: pp },
-          caption: `_Name_ : *${name} ( ${'@' + chat.split('@')[0]} )*\n_About_ : *${about}*\n_ID_ : *${id}*\n_Number_ : *${number}*\n_Chat_ : *${link}*`
+          caption: `_Name_ : *${name} ( ${'@' + chat.split('@')[0]} )${about !== undefined ? '\n_About_ : *' + about : ''}\n_ID_ : *${id}*\n_Number_ : *${number}*\n_Chat_ : *${link}*`
         }
       );
     } else if (chat.includes('us')) {
