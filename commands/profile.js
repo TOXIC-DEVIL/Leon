@@ -26,7 +26,7 @@ module.exports = {
       return await msg.reply(
         { 
           image: { url: pp },
-          caption: `_Name_ : *${name} ( ${'@' + chat.split('@')[0]} )${about !== undefined ? '\n_About_ : *' + about : ''}\n_ID_ : *${id}*\n_Number_ : *${number}*\n_Chat_ : *${link}*`
+          caption: `_Name_ : *${name} ( ${'@' + chat.split('@')[0]} )${about !== undefined ? ('\n_About_ : *' + about + '*') : ''}\n_ID_ : *${id}*\n_Number_ : *${number}*\n_Chat_ : *${link}*`
         }
       );
     } else if (chat.includes('us')) {
