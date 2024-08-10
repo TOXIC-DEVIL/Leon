@@ -109,7 +109,7 @@ msg.reply = async (message, options, jid = msg.chat) => {
  } else if (message.hasOwnProperty('sticker')) {
   return await sock.sendMessage(jid, { sticker: message.sticker, mimetype: (message?.mimetype || 'image/webp'), ...message }, { quoted: msg, ...options });
  } else if (message.hasOwnProperty('poll')) {
-  return await sock.sendMessage(jid, { poll: { name: message.poll.title, values: message.poll.options }, mentions: (await msg.getMentions(message.title + '\n' + message.poll.options.join('_'))), ...message }, { quoted: msg, ...options });
+  return await sock.sendMessage(jid, { poll: { name: message.poll.title, values: message.poll.options }, mentions: (await msg.getMentions(message.title + '\n' + String(message.poll.options))), ...message }, { quoted: msg, ...options });
  } else if (message.hasOwnProperty('delete')) {
   return await sock.sendMessage(jid, { delete: message.delete.key });
  } else if (message.hasOwnProperty('edit')) {
