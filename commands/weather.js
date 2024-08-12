@@ -9,7 +9,7 @@ module.exports = {
     let data = await parseJson('http://api.openweathermap.org/data/2.5/weather?q=' + text + '&units=metric&appid=060a6bcfa19809c2cd4d97a212b19273&language=en');
     if (data.cod !== 200) return await msg.reply({ text : '*Invalid city, Please enter a valid city name!*' });
     return await msg.reply({
-      text: `_City_ : *${data.name}*` +
+      text: `_City_ : *${data.name}*\n` +
             `_Weather_ : *${data.weather[0].main}*\n` +
             `_Climate_ : *${data.weather[0].description}*\n` +
             `_Temperature_ : *${data.main.temp}°C*\n` +
