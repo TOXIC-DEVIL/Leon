@@ -6,11 +6,11 @@ module.exports = async (msg, sock, store) => {
   msg.me = sock.user.id.includes(':') ? sock.user.id.split(':')[0]+'@s.whatsapp.net' : sock.user.id;
   msg.chat = msg.key.remoteJid
   msg.id = msg.key.id
-  msg.fromBot = msg.isBaileys = msg.id.startsWith('BAE5') && msg.id.length === 16
   msg.fromMe = msg.key.fromMe
   msg.isGroupChat = msg.isGroup = msg.key.remoteJid.endsWith('g.us')
   msg.isPrivateChat = msg.isPrivate = msg.key.remoteJid.endsWith('.net')
   msg.sender = msg.from = msg.fromMe ? msg.me : msg.isGroupChat ? msg.key.participant : msg.chat
+  msg.fromBot = msg.isBaileys = msg.sender === msg.me
   if (msg.isGroupChat) msg.participant = msg.key.participant
 }
 if (msg.message) {
