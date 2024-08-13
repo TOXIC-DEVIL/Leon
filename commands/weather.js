@@ -6,8 +6,11 @@ module.exports = {
   private: false,
   func: async (sock, msg, text) => {
     if (!text) return await msg.reply({ text: '*Please enter a city name!*\n*Example:*\n*- New York*' });
-    let data = await parseJson('http://api.openweathermap.org/data/2.5/weather?q=' + text + '&units=metric&appid=060a6bcfa19809c2cd4d97a212b19273&language=en');
-    if (data.cod !== 200) return await msg.reply({ text : '*Invalid city, Please enter a valid city name!*' });
+    try {
+      var data = await parseJson('http://api.openweathermap.org/data/2.5/weather?q=' + text + '&units=metric&appid=060a6bcfa19809c2cd4d97a212b19273&language=en');
+    } catch {
+      return await msg.reply({ text : '*Invalid city, Please enter a valid city name!*' });
+    }
     return await msg.reply({
       text: `_City_ : *${data.name}*\n` +
             `_Weather_ : *${data.weather[0].main}*\n` +
