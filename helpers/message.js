@@ -28,10 +28,11 @@ if (msg.message) {
   msg.replied.mentions = msg.msg.contextInfo ? msg.msg.contextInfo.mentionedJid : []
   msg.replied.fromMe = msg.replied.me = msg.replied.sender === msg.me
   msg.replied.mtype = getContentType(msg.replied)
+  msg.replied.viewonce = msg.replied?.viewOnceMessage?.message || msg.replied?.viewOnceMessageV2?.message || msg.replied?.viewOnceMessageV2Extension?.message || false
   msg.replied.text = msg.replied.text || msg.replied.caption || msg.replied.conversation || msg.replied.contentText || msg.replied.selectedDisplayText || msg.replied.title || false
-  msg.replied.image = msg.replied.imageMessage || false
-  msg.replied.video = msg.replied.videoMessage || false
-  msg.replied.audio = msg.replied.audioMessage || false
+  msg.replied.image = msg.replied.viewonce?.imageMessage || msg.replied.imageMessage || false
+  msg.replied.video = msg.replied.viewonce?.videoMessage || msg.replied.videoMessage || false
+  msg.replied.audio = msg.replied.viewonce?.audioMessage || msg.replied.audioMessage || false
   msg.replied.sticker = msg.replied.stickerMessage || false
   msg.replied.document = msg.replied.documentMessage || false
  }
