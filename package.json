@@ -41,6 +41,6 @@
     "ytdl-core": "github:distubejs/ytdl-core"
   },
   "engines": {
-    "node": "20.x"
+    "node": "20"
   }
 }
