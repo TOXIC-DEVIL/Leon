@@ -1,6 +1,6 @@
-FROM node
+FROM node:20-alpine
 
-RUN apt-get update
+RUN apk update && apk add git
 COPY package.json .
 RUN npm install
 COPY . .
