@@ -75,7 +75,7 @@ sock.awaitMessage = async (options = {}) => {
           const isGroup = chatId.endsWith('@g.us');
           const isStatus = chatId === 'status@broadcast';
 
-          const sender = fromMe ? socket.user.id.replace(/:.*@/g, '@') : (isGroup || isStatus) ? message.key.participant.replace(/:.*@/g, '@') : chatId;
+          const sender = fromMe ? sock.user.id.replace(/:.*@/g, '@') : (isGroup || isStatus) ? message.key.participant.replace(/:.*@/g, '@') : chatId;
           if (sender === options.sender && chatId === options.chatJid && filter(message)) {
             sock.ev.off('messages.upsert', listener);
             clearTimeout(interval);
