@@ -47,7 +47,7 @@ async function Connect() {
          }
         }
 
-        let { version, isLatest } = await fetchLatestBaileysVersion();
+        // let { version, isLatest } = await fetchLatestBaileysVersion();
         let { state, saveCreds } = await useMultiFileAuthState('./session');
         let sock = makeWASocket({
             logger: pino({ level: 'silent' }),
@@ -55,7 +55,7 @@ async function Connect() {
             markOnlineOnConnect: false,
             browser: ['Ubuntu', 'Chrome', '20.0.04'],
             auth: state,
-            version: version,
+            version: [2, 3000, 1015901307],
             patchMessageBeforeSending: (message) => {
               let requiresPatch = !!(message.buttonsMessage || message.listMessage || message.templateMessage)
               if (requiresPatch) {
