@@ -4,7 +4,7 @@ const { Sequelize, DataTypes } = require('sequelize');
 const { list, uninstall } = require('./helpers/database/commands');
 const { parseJson } = require('./helpers/utils');
 const { database } = require('./helpers/database.js');
-const { SESSION, ADMINS, MODE, PREFIX, PLATFORM } = require('./config');
+const { SESSION, ADMINS, MODE, PREFIX, PLATFORM, DEBUG } = require('./config');
 const Greetings = require('./helpers/database/greetings');
 const axios = require('axios');
 const pino = require('pino');
@@ -50,7 +50,7 @@ async function Connect() {
         // let { version, isLatest } = await fetchLatestBaileysVersion();
         let { state, saveCreds } = await useMultiFileAuthState('./session');
         let sock = makeWASocket({
-            logger: pino({ level: 'silent' }),
+            logger: pino({ level: DEBUG === true ? 'debug' : 'silent' }),
             printQRInTerminal: false,
             markOnlineOnConnect: false,
             browser: ['Ubuntu', 'Chrome', '20.0.04'],
