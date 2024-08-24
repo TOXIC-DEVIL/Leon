@@ -1,6 +1,6 @@
 const fs = require('fs');
 const { parseJson } = require('../helpers/utils');
-const ytdl = require('youtubedl-core');
+const ytdl = require('ytdl-core');
 
 module.exports = {
   command: 'song',
@@ -16,23 +16,23 @@ module.exports = {
      let video = json.result.filter((v) => v.type == 'video')[0].url;
      res = video.split('/').slice(-1)[0].replace('watch?v=', '');
     } catch (e) {
-     console.log(e);
+     throw e;
      return await msg.reply({ edit: { key: mesaj.key, text: '*Unable to find any song in this lyric!*' } });
     }
     let file = './' + res + '.mp3'
     await msg.reply({ edit: { key: mesaj.key, text: '*Downloading song...*' } });
-    try {
-     let audio = await ytdl(res, {
+    let audio = await ytdl(res, {
       filter: 'audioonly',
       quality: 'highestaudio'
-     });
-     audio.pipe(fs.createWriteStream(file));
-     audio.on('end', async () => {
-       await msg.reply({ delete: { key: mesaj.key } })
-       await msg.reply({ audio: fs.readFileSync(file) });
-     });
-   } catch {
-     return await msg.reply({ text: '*Unable to download the song!*' });
-   }
+    });
+    audio.pipe(fs.createWriteStream(file));
+    audio.on('end', async () => {
+      await msg.reply({ delete: { key: mesaj.key } })
+      await msg.reply({ audio: fs.readFileSync(file) });
+    });
+    audio.on('error', async (e) => {
+      await msg.reply({ text: '*Unable to download the song!*' });
+      throw e;
+    });
   }
 };

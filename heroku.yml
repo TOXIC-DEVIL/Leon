@@ -1,6 +1,0 @@
-build:
-  script:
-    - npm install
-
-run:
-  worker: node index.js

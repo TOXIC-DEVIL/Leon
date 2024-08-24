@@ -4,13 +4,18 @@ const { Sequelize, DataTypes } = require('sequelize');
 const { list, uninstall } = require('./helpers/database/commands');
 const { parseJson } = require('./helpers/utils');
 const { database } = require('./helpers/database.js');
-const { SESSION, ADMINS, MODE, PREFIX } = require('./config');
+const { SESSION, ADMINS, MODE, PREFIX, PLATFORM, DEBUG } = require('./config');
 const Greetings = require('./helpers/database/greetings');
 const axios = require('axios');
 const pino = require('pino');
 const colors = require('colors');
 const qrcode = require('qrcode-terminal');
 const fs = require('fs');
+if (PLATFORM == 'koyeb') {
+  require('http')
+   .createServer(async (req, res) => {})
+   .listen(process.env?.PORT || 8080, () => true);
+}
 
 const Users = database.define('Users', {
     name: {
@@ -42,15 +47,15 @@ async function Connect() {
          }
         }
 
-        let { version, isLatest } = await fetchLatestBaileysVersion();
+        // let { version, isLatest } = await fetchLatestBaileysVersion();
         let { state, saveCreds } = await useMultiFileAuthState('./session');
         let sock = makeWASocket({
-            logger: pino({ level: 'silent' }),
+            logger: pino({ level: DEBUG === true ? 'debug' : 'silent' }),
             printQRInTerminal: false,
             markOnlineOnConnect: false,
             browser: ['Ubuntu', 'Chrome', '20.0.04'],
             auth: state,
-            version: version,
+            version: [2, 3000, 1015901307],
             patchMessageBeforeSending: (message) => {
               let requiresPatch = !!(message.buttonsMessage || message.listMessage || message.templateMessage)
               if (requiresPatch) {

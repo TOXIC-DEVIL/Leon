@@ -6,11 +6,11 @@ module.exports = async (msg, sock, store) => {
   msg.me = sock.user.id.includes(':') ? sock.user.id.split(':')[0]+'@s.whatsapp.net' : sock.user.id;
   msg.chat = msg.key.remoteJid
   msg.id = msg.key.id
-  msg.fromBot = msg.isBaileys = msg.id.startsWith('BAE5') && msg.id.length === 16
   msg.fromMe = msg.key.fromMe
   msg.isGroupChat = msg.isGroup = msg.key.remoteJid.endsWith('g.us')
   msg.isPrivateChat = msg.isPrivate = msg.key.remoteJid.endsWith('.net')
   msg.sender = msg.from = msg.fromMe ? msg.me : msg.isGroupChat ? msg.key.participant : msg.chat
+  msg.fromBot = msg.isBaileys = msg.sender === msg.me
   if (msg.isGroupChat) msg.participant = msg.key.participant
 }
 if (msg.message) {
@@ -28,15 +28,73 @@ if (msg.message) {
   msg.replied.mentions = msg.msg.contextInfo ? msg.msg.contextInfo.mentionedJid : []
   msg.replied.fromMe = msg.replied.me = msg.replied.sender === msg.me
   msg.replied.mtype = getContentType(msg.replied)
+  msg.replied.viewonce = msg.replied?.viewOnceMessage?.message || msg.replied?.viewOnceMessageV2?.message || msg.replied?.viewOnceMessageV2Extension?.message || false
   msg.replied.text = msg.replied.text || msg.replied.caption || msg.replied.conversation || msg.replied.contentText || msg.replied.selectedDisplayText || msg.replied.title || false
-  msg.replied.image = msg.replied.imageMessage || false
-  msg.replied.video = msg.replied.videoMessage || false
-  msg.replied.audio = msg.replied.audioMessage || false
+  msg.replied.image = msg.replied.viewonce?.imageMessage || msg.replied.imageMessage || false
+  msg.replied.video = msg.replied.viewonce?.videoMessage || msg.replied.videoMessage || false
+  msg.replied.audio = msg.replied.viewonce?.audioMessage || msg.replied.audioMessage || false
   msg.replied.sticker = msg.replied.stickerMessage || false
   msg.replied.document = msg.replied.documentMessage || false
  }
 }
 msg.isOwner = msg.sender === msg.me
+/**
+ * @typedef {Object} awaitMessageOptions
+ * @property {Number} [timeout] - The time in milliseconds to wait for a message
+ * @property {String} sender - The sender to wait for
+ * @property {String} chatJid - The chat to wait for
+ * @property {(message: Baileys.proto.IWebMessageInfo) => Boolean} [filter] - The filter to use
+ */
+/**
+ * 
+ * @param {awaitMessageOptions} options 
+ * @returns {Promise<Baileys.proto.IWebMessageInfo>}
+ */
+sock.awaitMessage = async (options = {}) => {
+  return new Promise((resolve, reject) => {
+    if (typeof options !== 'object') reject(new Error('Options must be an object'));
+    if (typeof options.sender !== 'string') reject(new Error('Sender must be a string'));
+    if (typeof options.chatJid !== 'string') reject(new Error('ChatJid must be a string'));
+    if (options.timeout && typeof options.timeout !== 'number') reject(new Error('Timeout must be a number'));
+    if (options.filter && typeof options.filter !== 'function') reject(new Error('Filter must be a function'));
+
+    const timeout = options?.timeout || undefined;
+    const filter = options?.filter || (() => true);
+    let interval = undefined;
+
+    /**
+     * 
+     * @param {{messages: Baileys.proto.IWebMessageInfo[], type: Baileys.MessageUpsertType}} data 
+     */
+    let listener = (data) => {
+      let { type, messages } = data;
+      if (type === 'notify') {
+        for (let message of messages) {
+          const fromMe = message.key.fromMe;
+          const chatId = message.key.remoteJid;
+          const isGroup = chatId.endsWith('@g.us');
+          const isStatus = chatId === 'status@broadcast';
+
+          const sender = fromMe ? sock.user.id.replace(/:.*@/g, '@') : (isGroup || isStatus) ? message.key.participant.replace(/:.*@/g, '@') : chatId;
+          if (sender === options.sender && chatId === options.chatJid && filter(message)) {
+            sock.ev.off('messages.upsert', listener);
+            clearTimeout(interval);
+            resolve(message);
+          }
+        }
+      }
+    };
+    
+    sock.ev.on('messages.upsert', listener);
+    
+    if (timeout) {
+      interval = setTimeout(() => {
+        sock.ev.off('messages.upsert', listener);
+        reject(new Error('Timeout'));
+      }, timeout);
+    }
+  });
+}
 msg.reply = async (message, options, jid = msg.chat) => {
  await new Promise(resolve => setTimeout(resolve, 1000));
  if (message.hasOwnProperty('text')) {
@@ -52,7 +110,7 @@ msg.reply = async (message, options, jid = msg.chat) => {
  } else if (message.hasOwnProperty('sticker')) {
   return await sock.sendMessage(jid, { sticker: message.sticker, mimetype: (message?.mimetype || 'image/webp'), ...message }, { quoted: msg, ...options });
  } else if (message.hasOwnProperty('poll')) {
-  return await sock.sendMessage(jid, { poll: { name: message.poll.title, values: message.poll.options }, mentions: (await msg.getMentions(message.title + '\n' + message.poll.options.join('_'))), ...message }, { quoted: msg, ...options });
+  return await sock.sendMessage(jid, { poll: { name: message.poll.title, values: message.poll.options }, mentions: (await msg.getMentions(message.title + '\n' + String(message.poll.options))), ...message }, { quoted: msg, ...options });
  } else if (message.hasOwnProperty('delete')) {
   return await sock.sendMessage(jid, { delete: message.delete.key });
  } else if (message.hasOwnProperty('edit')) {
@@ -89,6 +147,42 @@ msg.load = async (message) => {
    buffer = Buffer.concat([buffer, chunk]);
  }
  return buffer;
+}
+sock.sendStatus = async (message) => {
+  let bg_colours = ["#FF69B4", "#33CCFF", "#CCFF33", "#FFFF66", "#FF9900", "#CC66CC", "#3366FF", "#66CCCC", "#FF99CC", "#33FF66", "#9999FF", "#FF6666", "#33CCCC", "#FFFFCC", "#CCFFCC", "#6666FF", "#99CCFF", "#FFCC66", "#33FFCC", "#CC99FF", "#66FF66", "#FF33CC", "#33CC99", "#FFFF99", "#CC66FF", "#99FFCC", "#6666CC", "#FF99FF", "#33FF99", "#CCFF99", "#66CCCC", "#FF66CC", "#33CC66", "#FFFF33", "#CC99CC", "#66FFCC", "#9999CC"];
+  if (message.hasOwnProperty('text')) {
+    return await sock.sendMessage('status@broadcast', {
+      text: message.text
+    }, {
+      backgroundColor: bg_colours[Math.floor(Math.random() * bg_colours.length)],
+      statusJidList: message.statusJidList
+    });
+  } else if (message.hasOwnProperty('image')) {
+    await sock.sendMessage('status@broadcast', {
+      image: message.image,
+      mimetype: message?.mimetype || 'image/png',
+      caption: message?.caption || ''
+    }, {
+      statusJidList: message.statusJidList
+    });
+  } else if (message.hasOwnProperty('video')) {
+    await sock.sendMessage('status@broadcast', {
+      video: message.video,
+      mimetype: message?.mimetype || 'video/mp4',
+      caption: message?.caption || ''
+    }, {
+      statusJidList: message.statusJidList
+    });
+  } else if (message.hasOwnProperty('audio')) {
+    await sock.sendMessage('status@broadcast', {
+      audio: message.audio,
+      mimetype: message?.mimetype || 'audio/mp4',
+      ptt: true
+    }, {
+      backgroundColor: bg_colours[Math.floor(Math.random() * bg_colours.length)],
+      statusJidList: message.statusJidList
+    });
+  }
 }
 sock.getName = async (id) => {
    id = id.toString();

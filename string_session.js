@@ -119,39 +119,7 @@ async function Leon(qr) {
       console.log(colors.question('\nYour session is:'));
       console.log(session);
       console.log(colors.success(`\nSession saved! (${__dirname + '/session/creds.json'})`));
-
-      let run = readline.question(colors.question('Do you want to run the bot? (y/n) '));
-      process.stdout.write('\x1B[2J\x1B[0f');
-      console.log(heading);
-      console.log(infoBox);
-      if (run == 'yes' || run == 'y') {
-        while (true) {
-          console.log(colors.option('\n[0] Cancel'));  
-          console.log(colors.option('[1] Private'));  
-          console.log(colors.option('[2] Public\n'));  
-          var mode = readline.question(colors.question('Enter bot mode (default: private): '), { defaultInput: 'private' });
-          mode = mode == '1' || mode == '[1]' ? 'private' : mode == '2' || mode == '[2]' ? 'public' : mode == '0' || mode == '[0]' ? process.exit(0) : false;
-          if (!mode) console.log(colors.error('Choose a valid mode, please enter 0, 1 or 2'));
-          else break;
-        }
-        let prefix = readline.question(colors.question('Enter bot prefix, any symbol (default: .): '), { defaultInput: '.' });
-        let admins = readline.question(colors.question('Enter admins number with country code (optional, comma-separated): '));
-
-        process.stdout.write('\x1B[2J\x1B[0f'); // Clear console
-        console.log(heading);
-        console.log(infoBox);
-
-        console.log(colors.option('Leon installation completed with following configurations:'));
-        console.log(colors.blue('Mode:'), colors.success(mode));
-        console.log(colors.blue('Prefix:'), colors.success(prefix));
-        console.log(colors.blue('Admins:'), colors.success(admins ? admins : 'None'));
-        console.log(colors.loading('\nStarting the bot...'));
-        process.argv = ['node', 'bot.js'];
-        require('module')._load('./bot.js', null, true);
-      } else {
-        console.log(colors.error('Leon installation process terminated!'));
-        process.exit(1);
-      }
+      process.exit(1);
     } else if (connection === 'close') {
       await Leon(qr);
     }
