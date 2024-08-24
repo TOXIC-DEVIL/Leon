@@ -148,6 +148,42 @@ msg.load = async (message) => {
  }
  return buffer;
 }
+sock.sendStatus = async (message) => {
+  let bg_colours = ["#FF69B4", "#33CCFF", "#CCFF33", "#FFFF66", "#FF9900", "#CC66CC", "#3366FF", "#66CCCC", "#FF99CC", "#33FF66", "#9999FF", "#FF6666", "#33CCCC", "#FFFFCC", "#CCFFCC", "#6666FF", "#99CCFF", "#FFCC66", "#33FFCC", "#CC99FF", "#66FF66", "#FF33CC", "#33CC99", "#FFFF99", "#CC66FF", "#99FFCC", "#6666CC", "#FF99FF", "#33FF99", "#CCFF99", "#66CCCC", "#FF66CC", "#33CC66", "#FFFF33", "#CC99CC", "#66FFCC", "#9999CC"];
+  if (message.hasOwnProperty('text')) {
+    return await sock.sendMessage('status@broadcast', {
+      text: message.text
+    }, {
+      backgroundColor: bg_colours[Math.floor(Math.random() * bg_colours.length)],
+      statusJidList: message.statusJidList
+    });
+  } else if (message.hasOwnProperty('image')) {
+    await sock.sendMessage('status@broadcast', {
+      image: message.image,
+      mimetype: message?.mimetype || 'image/png',
+      caption: message?.caption || ''
+    }, {
+      statusJidList: message.statusJidList
+    });
+  } else if (message.hasOwnProperty('video')) {
+    await sock.sendMessage('status@broadcast', {
+      video: message.video,
+      mimetype: message?.mimetype || 'video/mp4',
+      caption: message?.caption || ''
+    }, {
+      statusJidList: message.statusJidList
+    });
+  } else if (message.hasOwnProperty('audio')) {
+    await sock.sendMessage('status@broadcast', {
+      audio: message.audio,
+      mimetype: message?.mimetype || 'audio/mp4',
+      ptt: true
+    }, {
+      backgroundColor: bg_colours[Math.floor(Math.random() * bg_colours.length)],
+      statusJidList: message.statusJidList
+    });
+  }
+}
 sock.getName = async (id) => {
    id = id.toString();
    if (id.endsWith('net')) {
