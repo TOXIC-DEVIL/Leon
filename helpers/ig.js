@@ -1,25 +1,42 @@
-const axios = require('axios');
-const cheerio = require('cheerio');
+const CryptoJS = require('crypto-js');
 
 async function instagram(url) {
   try {
-    let response = await axios.post(
-      'https://v3.saveig.app/api/ajaxSearch', `q=${encodeURIComponent(url)}&t=media&lang=en`, {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36",
-          "X-Requested-With": "XMLHttpRequest",
-        }
-      }
-    );
-    let $ = cheerio.load(response.data.data);
-    let result = $('.download-items__btn > a').map((_, a) => $(a).attr('href')).get();
-
+    let headers = { 'url': encryptUrl(url) };
+    const response = await fetch('https://backend.instavideosave.com/allinone', {
+      method: 'GET',
+      headers,
+    });
+    let data = await response.json();
+    if (!data) return false;
+    let result = [];
+    if (data.video) {
+      data.video.forEach(v => {
+        if (v.video) result.push(v.video);
+      });
+    }
+    else if (data.image) {
+      data.image.forEach(image => {
+        result.push(image);
+      });
+    }
     return { data: result };
   } catch (e) {
     console.log(e);
     return false;
   }
+};
+
+function encryptUrl(input) {
+  const key = CryptoJS.enc.Utf8.parse('qwertyuioplkjhgf');
+  const iv = CryptoJS.lib.WordArray.random(16);
+  const encrypted = CryptoJS.AES.encrypt(input, key, {
+    iv: iv,
+    mode: CryptoJS.mode.ECB,
+    padding: CryptoJS.pad.Pkcs7,
+  });
+  const encryptedHex = encrypted.ciphertext.toString(CryptoJS.enc.Hex);
+  return encryptedHex;
 };
 
 module.exports = { instagram };
