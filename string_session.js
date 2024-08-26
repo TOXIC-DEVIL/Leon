@@ -76,7 +76,7 @@ try {
 } catch {}
 
 async function Leon(qr) {
-  let { version } = await fetchLatestBaileysVersion();
+  // let { version } = await fetchLatestBaileysVersion();
   let { state, saveCreds } = await useMultiFileAuthState('./session/');
   let sock = makeWASocket({
     logger: pino({ level: 'silent' }),
@@ -84,7 +84,7 @@ async function Leon(qr) {
     markOnlineOnConnect: false,
     browser: ['Ubuntu', 'Chrome', '20.0.04'],
     auth: state,
-    version: version,
+    version: [2, 3000, 1015901307],
     getMessage: async (key) => {
       let jid = jidNormalizedUser(key.remoteJid);
       let msg = await store.loadMessage(jid, key.id);
