@@ -119,14 +119,14 @@ async function Connect() {
            if (info.action == 'add') {
             let wtext = await Greetings.getMessage('welcome', info.id);
             if (wtext !== false) await sock.sendMessage(info.id, {
-             text: wtext.replace(/{subject}/g, subject).replace(/{version}/g, require('./package.json').version).replace(/{size}/g, size).replace(/{user}/g, '@'+info.id.split('@')[0]).replace(/{owner}/g, '@'+owner.split('@')[0]),
-             mentions: [owner, info.id]
+             text: wtext.replace(/{subject}/g, subject).replace(/{version}/g, require('./package.json').version).replace(/{size}/g, size).replace(/{user}/g, '@'+info.participants[0].split('@')[0]).replace(/{owner}/g, '@'+owner.split('@')[0]),
+             mentions: [owner, ...info.participants]
             });
            } else if (info.action == 'remove') {
             let gtext = await Greetings.getMessage('goodbye', info.id);
             if (gtext !== false) await sock.sendMessage(info.id, {
-             text: gtext.replace(/{subject}/g, subject).replace(/{version}/g, require('./package.json').version).replace(/{size}/g, size).replace(/{user}/g, '@'+info.id.split('@')[0]).replace(/{owner}/g, '@'+owner.split('@')[0]),
-             mentions: [owner, info.id]
+             text: gtext.replace(/{subject}/g, subject).replace(/{version}/g, require('./package.json').version).replace(/{size}/g, size).replace(/{user}/g, '@'+info.participants[0].split('@')[0]).replace(/{owner}/g, '@'+owner.split('@')[0]),
+             mentions: [owner, ...info.participants]
             });
            }
         });
