@@ -33,6 +33,13 @@ module.exports = {
        ptt: msg.replied.audio?.ptt || false,
        mentions
      });
+    } else if (msg.replied && msg.replied.sticker) {
+     let webp = await msg.load(msg.replied.sticker);
+     return await msg.reply({
+       sticker: webp,
+       isAnimated: msg.replied.sticker?.isAnimated || false,
+       mentions
+     });
     } else if (msg.replied && msg.replied.document) {
      let doc = await msg.load(msg.replied.document);
      return await msg.reply({
