@@ -8,9 +8,9 @@ module.exports = {
     if (!text) return await msg.reply({ text: '*Please enter instagram post, or reels url!*' });
     await instagram(text)
      .then(async (result) => {
-      if (!result) return await msg.reply({ text: '*Invalid url, Please enter a valid instagram post/reels url!*' });
+      if (!result || result.data.length < 1) return await msg.reply({ text: '*Invalid url, Please enter a valid instagram post/reels url!*' });
       for (let data of result.data) {
-        return await msg.reply({ 
+        await msg.reply({ 
           [(data.match(/jpg|png|jpeg/) ? 'image' : 'video')]: {
             url: data
           }
