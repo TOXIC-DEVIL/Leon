@@ -10,15 +10,18 @@ async function instagram(url) {
     let data = await response.json();
     if (!data) return false;
     let result = [];
-    if (data.video) {
+    if (data.image) {
+      data.image.map(image => {
+        result.push(image);
+      });
+    } 
+    else if (data.video) {
       data.video.forEach(v => {
         if (v.video) result.push(v.video);
       });
     }
-    else if (data.image) {
-      data.image.forEach(image => {
-        result.push(image);
-      });
+    else {
+      result = false;
     }
     return { data: result };
   } catch (e) {
