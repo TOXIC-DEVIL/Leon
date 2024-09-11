@@ -21,7 +21,7 @@
     "colors": "^1.4.0",
     "form-data": "^4.0.0",
     "fluent-ffmpeg": "^2.1.2",
-    "g-i-s": "^2.1.7",
+    "g-i-s": "github:TOXIC-DEVIL/g-i-s",
     "google-tts-api": "^2.0.2",
     "http": "^0.0.1-security",
     "jimp": "^0.16.13",
