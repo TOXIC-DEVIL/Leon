@@ -4,7 +4,7 @@ const { Sequelize, DataTypes } = require('sequelize');
 const { list, uninstall } = require('./helpers/database/commands');
 const { parseJson } = require('./helpers/utils');
 const { database } = require('./helpers/database.js');
-const { SESSION, ADMINS, MODE, PREFIX, PLATFORM, DEBUG } = require('./config');
+const { SESSION, ADMINS, MODE, PREFIX, ONLINE, PLATFORM, DEBUG } = require('./config');
 const Greetings = require('./helpers/database/greetings');
 const axios = require('axios');
 const pino = require('pino');
@@ -119,14 +119,14 @@ async function Connect() {
            if (info.action == 'add') {
             let wtext = await Greetings.getMessage('welcome', info.id);
             if (wtext !== false) await sock.sendMessage(info.id, {
-             text: wtext.replace(/{subject}/g, subject).replace(/{version}/g, require('./package.json').version).replace(/{size}/g, size).replace(/{owner}/g, '@'+owner.split('@')[0]),
-             mentions: [owner]
+             text: wtext.replace(/{subject}/g, subject).replace(/{version}/g, require('./package.json').version).replace(/{size}/g, size).replace(/{user}/g, '@'+info.participants[0].split('@')[0]).replace(/{owner}/g, '@'+owner.split('@')[0]),
+             mentions: [owner, ...info.participants]
             });
            } else if (info.action == 'remove') {
             let gtext = await Greetings.getMessage('goodbye', info.id);
             if (gtext !== false) await sock.sendMessage(info.id, {
-             text: gtext.replace(/{subject}/g, subject).replace(/{version}/g, require('./package.json').version).replace(/{size}/g, size).replace(/{owner}/g, '@'+owner.split('@')[0]),
-             mentions: [owner]
+             text: gtext.replace(/{subject}/g, subject).replace(/{version}/g, require('./package.json').version).replace(/{size}/g, size).replace(/{user}/g, '@'+info.participants[0].split('@')[0]).replace(/{owner}/g, '@'+owner.split('@')[0]),
+             mentions: [owner, ...info.participants]
             });
            }
         });
@@ -136,6 +136,7 @@ async function Connect() {
             if (!msg.message) return;
             msg = await require('./helpers/message')(msg, sock, store);
             if (msg.chat === 'status@broadcast') return;
+            if (ONLINE !== true) await sock.sendPresenceUpdate('unavailable', msg.chat);
 
             try {
              if (allCommands(msg.command) || msg.isPrivate) {

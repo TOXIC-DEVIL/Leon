@@ -5,6 +5,7 @@ module.exports = {
   DEBUG: process.env['DEBUG'] || false,
   MODE: process.env['MODE'] || 'private',
   PREFIX: process.env['PREFIX'] || '!',
+  ONLINE: process.env['ONLINE'] || true,
   PLATFORM: process.env['PLATFORM'] || 'heroku',
   RBG_APIKEY: process.env['RBG_APIKEY'] || false,
 };

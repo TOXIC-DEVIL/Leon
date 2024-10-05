@@ -16,7 +16,6 @@ module.exports = {
      let video = json.result.filter((v) => v.type == 'video')[0].url;
      res = video.split('/').slice(-1)[0].replace('watch?v=', '');
     } catch (e) {
-     throw e;
      return await msg.reply({ edit: { key: mesaj.key, text: '*Unable to find any song in this lyric!*' } });
     }
     let file = './' + res + '.mp3'
@@ -32,7 +31,6 @@ module.exports = {
     });
     audio.on('error', async (e) => {
       await msg.reply({ text: '*Unable to download the song!*' });
-      throw e;
     });
   }
 };
